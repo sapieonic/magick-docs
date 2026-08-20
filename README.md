@@ -14,9 +14,13 @@ Merge that change to `main`. The [Deploy weekly updates](.github/workflows/deplo
 
 ## Enable GitHub Pages
 
-One-time repository setting:
+The deploy job uses `actions/configure-pages` with `enablement: true` so it will try to turn Pages on if it is not already enabled.
 
-1. Open **Settings → Pages**.
-2. Set **Source** to **GitHub Actions**.
+That flag cannot use the default `GITHUB_TOKEN`. Add a repository secret named `PAGES_ENABLE_TOKEN`:
+
+- Personal access token: `repo` scope, or fine-grained **Pages: Write**
+- GitHub App token: `administration:write` and `pages:write`
+
+Without that secret, enable Pages once in **Settings → Pages** and set **Source** to **GitHub Actions**.
 
 The site URL for this repository is `https://sapieonic.github.io/magick-docs/`. The same listing is also available as plain text at `/index.txt`.

@@ -1,0 +1,125 @@
+name: Deploy weekly updates
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "weekly-updates/**"
+      - "scripts/build_weekly_updates_site.py"
+      - ".github/workflows/deploy-weekly-updates.yml"
+  pull_request:
+    paths:
+      - "weekly-updates/**"
+      - "scripts/build_weekly_updates_site.py"
+      - ".github/workflows/deploy-weekly-updates.yml"
+      - "tests/test_build_weekly_updates_site.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  pull-requests: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run site builder tests
+        run: PYTHONPATH=. python3 -m unittest discover -s tests -v
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    outputs:
+      pages_listing: ${{ steps.build.outputs.pages_listing }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build Pages site
+        id: build
+        run: |
+          python3 scripts/build_weekly_updates_site.py
+          {
+            echo "pages_listing<<EOF"
+            cat _site/index.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+      - name: Show navigation listing
+        run: cat _site/index.txt
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  comment:
+    if: github.event_name == 'pull_request'
+    needs: build
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment published page listing
+        uses: actions/github-script@v7
+        env:
+          PAGES_LISTING: ${{ needs.build.outputs.pages_listing }}
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const baseUrl = `https://${owner}.github.io/${repo}/`;
+            const listing = process.env.PAGES_LISTING || "No pages listed.";
+            const body = [
+              "### Weekly updates Pages preview",
+              "",
+              "After this PR merges to `main`, GitHub Pages will publish the HTML under `weekly-updates/` with this navigation listing:",
+              "",
+              "```",
+              listing.trim(),
+              "```",
+              "",
+              `Site root: ${baseUrl}`,
+              `Text index: ${baseUrl}index.txt`,
+            ].join("\n");
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner,
+              repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find((comment) =>
+              comment.body.includes("### Weekly updates Pages preview")
+            );
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+  deploy:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

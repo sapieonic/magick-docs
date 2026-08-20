@@ -7,13 +7,15 @@ Drop raw HTML reports here. A GitHub Actions workflow publishes this directory t
 ```text
 weekly-updates/
   <customer>/
-    <date>.html
+    <YYYY-MM-DD>/
+      <customer-slug>-health-review.html
 ```
 
 Examples:
 
 ```text
-weekly-updates/samarthya/2026-08-20.html
+weekly-updates/Samarthya/2026-08-20/samarthya-health-review.html
+weekly-updates/BKP Homes/2026-08-20/bkp-homes-health-review.html
 weekly-updates/bkb/2026-08-14.html
 weekly-updates/bkb/2026-08-07/index.html
 ```

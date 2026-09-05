@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BKP Homes Health Review</title>
+  <meta name="description" content="Voice, automations, and console for BKP Homes over 29 Aug-5 Sep 2026.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232a78d6'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='white' font-family='system-ui' font-size='16' font-weight='700'%3EB%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --plane:#f4f6f5;
+      --surface:#ffffff;
+      --surface-2:#fafbfa;
+      --ink:#0d1211;
+      --ink-2:#555e5b;
+      --ink-3:#7f8a87;
+      --rule:#e2e6e4;
+      --rule-strong:#c8cfcc;
+      --grid:#e8ebe9;
+      --accent:#2a78d6;
+      --cat-blue:#2a78d6;
+      --cat-orange:#eb6834;
+      --cat-aqua:#1baf7a;
+      --good:#0ca30c;
+      --warning:#fab219;
+      --serious:#ec835a;
+      --critical:#d03b3b;
+      --good-text:#0ca30c;
+      --warning-text:#8a6000;
+      --serious-text:#a94f26;
+      --critical-text:#d03b3b;
+      --shadow: 0 1px 0 rgba(13,18,17,.04);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --plane:#0e1211;
+        --surface:#181c1b;
+        --surface-2:#1d2221;
+        --ink:#f1f4f3;
+        --ink-2:#a6b0ac;
+        --ink-3:#7f8a87;
+        --rule:#272d2b;
+        --rule-strong:#39413e;
+        --grid:#242a28;
+        --accent:#3987e5;
+        --cat-blue:#3987e5;
+        --cat-orange:#d95926;
+        --cat-aqua:#199e70;
+        --good-text:#0ca30c;
+        --warning-text:#fab219;
+        --serious-text:#ec835a;
+        --critical-text:#d03b3b;
+        --shadow: 0 1px 0 rgba(0,0,0,.35);
+      }
+    }
+    :root[data-theme="dark"] {
+      --plane:#0e1211;
+      --surface:#181c1b;
+      --surface-2:#1d2221;
+      --ink:#f1f4f3;
+      --ink-2:#a6b0ac;
+      --ink-3:#7f8a87;
+      --rule:#272d2b;
+      --rule-strong:#39413e;
+      --grid:#242a28;
+      --accent:#3987e5;
+      --cat-blue:#3987e5;
+      --cat-orange:#d95926;
+      --cat-aqua:#199e70;
+      --good-text:#0ca30c;
+      --warning-text:#fab219;
+      --serious-text:#ec835a;
+      --critical-text:#d03b3b;
+      --shadow: 0 1px 0 rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--plane);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 32px 24px 80px; }
+    .prose { max-width: 68ch; }
+    .mono, .eyebrow, .chip, .evidence, th, .idchip, .tick, .delta, .fid {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      font-size: 11px;
+      color: var(--ink-3);
+      margin: 0 0 8px;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      letter-spacing: -.032em;
+      line-height: 1.1;
+      margin: 0 0 12px;
+      font-weight: 650;
+    }
+    h2 {
+      font-size: 1.35rem;
+      letter-spacing: -.02em;
+      margin: 0 0 8px;
+      font-weight: 650;
+    }
+    h3 { font-size: 1rem; margin: 0 0 6px; font-weight: 650; }
+    p { margin: 0 0 12px; }
+    a { color: var(--accent); }
+    .mast {
+      display: flex; justify-content: space-between; gap: 24px; align-items: flex-start;
+      margin-bottom: 28px;
+    }
+    .thesis { color: var(--ink-2); font-size: 1.05rem; max-width: 68ch; }
+    .tools { display: flex; gap: 8px; flex-shrink: 0; }
+    button.theme {
+      background: var(--surface);
+      color: var(--ink);
+      border: 1px solid var(--rule-strong);
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+    }
+    .idrow { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 6px; }
+    .idchip {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      letter-spacing: .04em;
+      color: var(--ink-2);
+      font-variant-numeric: tabular-nums;
+    }
+    .meta { font-size: 12px; color: var(--ink-3); margin-top: 8px; }
+    .rail {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 28px 0 40px;
+    }
+    .vcell {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 16px 16px 14px;
+      box-shadow: var(--shadow);
+    }
+    .vtop { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .vstate {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      font-size: 11px;
+    }
+    .vlabel { font-size: 13px; color: var(--ink-3); margin-bottom: 6px; }
+    .vnote { font-size: 13.5px; color: var(--ink-2); margin: 0; line-height: 1.45; }
+    section { margin: 48px 0; }
+    .sec-head { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; margin-bottom: 16px; }
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+      gap: 12px;
+      margin: 20px 0 28px;
+    }
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .kpi .val {
+      font-size: 1.85rem;
+      font-weight: 650;
+      letter-spacing: -.03em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
+    }
+    .kpi .cap { font-size: 12.5px; color: var(--ink-3); margin-top: 6px; }
+    .delta {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-top: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+    .delta.up { color: var(--good-text); }
+    .delta.down { color: var(--serious-text); }
+    .delta.flat { color: var(--ink-3); }
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 18px 18px 12px;
+      margin: 16px 0;
+    }
+    .panel h3 { color: var(--ink); }
+    .sub { font-size: 13px; color: var(--ink-3); margin: 0 0 12px; }
+    .chart { width: 100%; height: 220px; display: block; }
+    .chart.tall { height: 160px; }
+    .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--ink-2); margin: 8px 0 0; }
+    .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+    table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 13.5px; }
+    th {
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      font-size: 10.5px;
+      color: var(--ink-3);
+      font-weight: 500;
+      border-bottom: 1px solid var(--rule-strong);
+      padding: 8px 10px;
+    }
+    td { padding: 8px 10px; border-bottom: 1px solid var(--rule); }
+    td.n, th.n { text-align: right; }
+    tr:hover td { background: var(--surface-2); }
+    .findings { display: flex; flex-direction: column; gap: 12px; }
+    .finding {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 16px 18px 14px 18px;
+      border-left: 4px solid var(--rule-strong);
+    }
+    .finding.critical { border-left-color: var(--critical); }
+    .finding.degraded { border-left-color: var(--serious); }
+    .finding.friction { border-left-color: var(--warning); }
+    .finding.noise { border-left-color: var(--ink-3); }
+    .finding.verify { border-left-color: var(--accent); }
+    .fhead { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; }
+    .fid { font-size: 12px; letter-spacing: .08em; color: var(--ink-2); }
+    .chip {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px solid var(--rule);
+      color: var(--ink-2);
+    }
+    .chip.sev-critical { color: var(--critical-text); border-color: var(--critical); }
+    .chip.sev-degraded { color: var(--serious-text); border-color: var(--serious); }
+    .chip.sev-friction { color: var(--warning-text); border-color: var(--warning); }
+    .chip.sev-noise { color: var(--ink-3); }
+    .chip.sev-verify { color: var(--accent); border-color: var(--accent); }
+    .chip.live { color: var(--serious-text); }
+    .chip.resolved { color: var(--good-text); }
+    .fix {
+      background: var(--surface-2);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 14px;
+      margin: 10px 0;
+    }
+    .fix b { font-weight: 650; }
+    .evidence {
+      font-size: 11.5px;
+      color: var(--ink-3);
+      margin: 8px 0 0;
+      word-break: break-word;
+    }
+    .tl { list-style: none; margin: 0; padding: 0; }
+    .tl li {
+      display: grid;
+      grid-template-columns: 92px 16px 1fr;
+      gap: 12px;
+      padding: 0 0 18px;
+    }
+    .tldate {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 11.5px;
+      color: var(--ink-3);
+      text-align: right;
+      padding-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+    .tldotwrap { position: relative; }
+    .tldotwrap:before {
+      content: "";
+      position: absolute;
+      left: 6px; top: 10px; bottom: -18px;
+      width: 1px;
+      background: var(--rule-strong);
+    }
+    .tl li:last-child .tldotwrap:before { display: none; }
+    .tldot {
+      width: 13px; height: 13px; border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--ink-3);
+      position: relative; z-index: 1; margin-top: 4px;
+    }
+    .tldot.good { border-color: var(--good); }
+    .tldot.warn { border-color: var(--warning); }
+    .tldot.serious { border-color: var(--serious); }
+    .tldot.accent { border-color: var(--accent); }
+    .recs { display: flex; flex-direction: column; gap: 10px; }
+    .rec {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+    }
+    .rn {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 650;
+    }
+    .owner { font-size: 12.5px; color: var(--ink-3); margin-top: 4px; }
+    details.appendix {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-top: 16px;
+    }
+    details.appendix summary { cursor: pointer; font-weight: 650; }
+    .tip {
+      position: absolute;
+      pointer-events: none;
+      background: var(--ink);
+      color: var(--plane);
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      transform: translate(-50%, -120%);
+      display: none;
+      z-index: 5;
+    }
+    .method li { margin-bottom: 6px; }
+    @media (max-width: 860px) {
+      .rail { grid-template-columns: 1fr 1fr; }
+      .mast { flex-direction: column; }
+      .tl li { grid-template-columns: 72px 16px 1fr; }
+    }
+    @media (max-width: 560px) {
+      .rail { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="mast">
+      <div>
+        <p class="eyebrow">Customer health review &#183; production</p>
+        <h1>BKP Homes</h1>
+        <p class="thesis">Voice is busier than any week in this series and still connects every inbound call. The edges do not: the preset transfer destination has now failed 41 times in a row since 25 Aug, and the agent&#8217;s own close rate slipped from 51% to 40%. WhatsApp held.</p>
+        <div class="idrow">
+          <span class="idchip">tenant b741952f-e815-430b-8136-8b4b59070a3e</span>
+          <span class="idchip">account Inbound cc0bd2e4-388e-4512-bb5e-1a0b41996f81</span>
+          <span class="idchip">91 days on platform</span>
+          <span class="idchip">created 2026-06-06</span>
+        </div>
+        <p class="meta mono">window 2026-08-29 06:30 UTC &#8594; 2026-09-05 06:30 UTC &#183; PostHog + Loki &#183; fourth weekly run</p>
+      </div>
+      <div class="tools">
+        <button class="theme" type="button" id="themeBtn" aria-label="Toggle color theme">Theme</button>
+      </div>
+    </header>
+
+    <div class="rail" aria-label="Component verdicts">
+      <div class="vcell">
+        <div class="vtop"><span class="dot" style="background:var(--good)"></span><span class="vstate" style="color:var(--good-text)">Healthy</span></div>
+        <div class="vlabel">Voice</div>
+        <p class="vnote">230/230 connected. One pipeline error still talked. All inbound, all from IVR, Vobiz + Gemini Live.</p>
+      </div>
+      <div class="vcell">
+        <div class="vtop"><span class="dot" style="background:var(--accent)"></span><span class="vstate" style="color:var(--accent)">Verify</span></div>
+        <div class="vlabel">Platform</div>
+        <p class="vnote">HTTP edge is cleaner (p95 55 ms, no 5xx, no Loki errors). Voice credits still never reserve, so settlement warns 252 times: not a leak.</p>
+      </div>
+      <div class="vcell">
+        <div class="vtop"><span class="dot" style="background:var(--serious)"></span><span class="vstate" style="color:var(--serious-text)">Degraded</span></div>
+        <div class="vlabel">Automations &amp; integrations</div>
+        <p class="vnote">WhatsApp 214/214. Webhook dropped 2 of 97 and kept sending. Human transfer: 0 of 41 connected, all preset.</p>
+      </div>
+      <div class="vcell">
+        <div class="vtop"><span class="dot" style="background:var(--warning)"></span><span class="vstate" style="color:var(--warning-text)">Friction</span></div>
+        <div class="vlabel">Console</div>
+        <p class="vnote">2 users, 21 pageviews, last view 5 Sep. They opened the campaign composer once. All 4 api_errors are the expected thread 404.</p>
+      </div>
+    </div>
+
+    <section id="s01">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">01 &#183; Where they stand</p>
+          <h2>The desk got busier; the handoff stayed dead</h2>
+        </div>
+      </div>
+      <p class="prose">91 days on the platform. Production still lives on the <b>Inbound</b> account. A new account, Sreenidhi_vijayawada, was created 29 Aug and produced only an identify plus a campaign-composer open &#8212; no calls. Default extra key 3d4ab1ca identified once; srihan, chitboss, Rajendra Jewellers, and Default 772f938b / b078da10 were silent. 230 completed calls is 45 more than the prior seven days. Daily cadence ran 17&#8211;46 on full days, including the weekend. Seats stayed at 2. They did not rewrite the prompt or the IVR this week.</p>
+      <div class="kpis">
+        <div class="kpi"><div class="val">230</div><div class="cap">Calls completed</div><div class="delta up">+45 vs prior 7d</div></div>
+        <div class="kpi"><div class="val">100%</div><div class="cap">Connect rate (n=230)</div><div class="delta flat">1 failed status</div></div>
+        <div class="kpi"><div class="val">306</div><div class="cap">Talk minutes</div><div class="delta up">+4 vs prior 7d</div></div>
+        <div class="kpi"><div class="val">40%</div><div class="cap">Model-scored resolution</div><div class="delta down">88 / 219 analyzed</div></div>
+        <div class="kpi"><div class="val">0</div><div class="cap">Connected transfers this week</div><div class="delta down">41 / 41 preset failed</div></div>
+        <div class="kpi"><div class="val">2</div><div class="cap">Console users</div><div class="delta flat">same as prior 7d</div></div>
+      </div>
+    </section>
+
+    <section id="s02">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">02 &#183; Voice reliability</p>
+          <h2>Every completed call connected</h2>
+        </div>
+      </div>
+      <p class="prose">One pipeline, one provider, one direction: <span class="mono">gemini_live</span> / Vobiz / inbound. Average talk 79.8 s, p50 78 s, p90 144 s &#8212; shorter than last week&#8217;s 97.9 s average, which is why 45 extra calls added only 4 talk minutes. 15 calls ran under 10 s (remote hangups on the opener, not a platform miss). Max talk 300.0 s exactly: two calls sat at <span class="mono">CALL_TIMEOUT_SECONDS</span> with outcome no_resolution. 41 of 230 (18%) escalated to a human; none of those transfers connected. Zero voicemail, zero tool calls on the voice path. One call ended <span class="mono">AI_PIPELINE_ERROR</span> and still counted as connected &#8212; connect rate and success rate are different questions this week (230/230 vs 229/230).</p>
+      <div class="panel">
+        <h3>Daily inbound vs connected voice</h3>
+        <p class="sub">Separate from API errors below: call volume and error counts do not share a scale. 29 Aug and 5 Sep are partial days (window 06:30 to 06:30 UTC).</p>
+        <div style="position:relative">
+          <svg class="chart" id="chartCalls" viewBox="0 0 1040 220" role="img" aria-label="Daily inbound and connected calls"></svg>
+          <div class="tip" id="tipCalls"></div>
+        </div>
+        <p class="legend"><span><i style="background:var(--cat-blue)"></i>Inbound resolved</span><span><i style="background:var(--cat-aqua)"></i>Connected voice</span></p>
+      </div>
+      <div class="panel">
+        <h3>Console API errors, same days</h3>
+        <p class="sub">Plotted on its own axis so a 3-error Tuesday cannot hide a 46-call Friday.</p>
+        <div style="position:relative">
+          <svg class="chart tall" id="chartApi" viewBox="0 0 1040 160" role="img" aria-label="Daily API errors"></svg>
+          <div class="tip" id="tipApi"></div>
+        </div>
+        <p class="legend"><span><i style="background:var(--cat-orange)"></i>api_error</span></p>
+      </div>
+      <div class="panel">
+        <h3>Outcomes</h3>
+        <table>
+          <thead><tr><th>Status</th><th>Outcome</th><th>Error</th><th class="n">Calls</th><th class="n">Connected</th><th class="n">Avg talk s</th></tr></thead>
+          <tbody>
+            <tr><td>completed</td><td>&#8212;</td><td>&#8212;</td><td class="n">181</td><td class="n">181</td><td class="n">79.0</td></tr>
+            <tr><td>escalate_human</td><td>escalation_unanswered</td><td>&#8212;</td><td class="n">38</td><td class="n">38</td><td class="n">70.0</td></tr>
+            <tr><td>completed</td><td>no_response</td><td>&#8212;</td><td class="n">5</td><td class="n">5</td><td class="n">90.4</td></tr>
+            <tr><td>escalate_human</td><td>escalate_human</td><td>TRANSFER_FAILED</td><td class="n">3</td><td class="n">3</td><td class="n">87.7</td></tr>
+            <tr><td>completed</td><td>no_resolution</td><td>&#8212;</td><td class="n">2</td><td class="n">2</td><td class="n">300.0</td></tr>
+            <tr><td>failed</td><td>ai_pipeline_error</td><td>AI_PIPELINE_ERROR</td><td class="n">1</td><td class="n">1</td><td class="n">96.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="s03">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">03 &#183; Conversation quality</p>
+          <h2>Still polite, closing less than last week</h2>
+        </div>
+      </div>
+      <p class="prose">219 of 230 completed calls were scored (11 completed calls were not). Resolution and sentiment here are an LLM grading its own transcripts &#8212; useful for comparing calls inside this account, not a customer-confirmed outcome. 183 of 219 scored neutral; 62 of those neutrals were marked resolved (34%, down from 43% inside last week&#8217;s neutrals). Every positive call resolved. Mixed is still the weak cell: 6 of 16 resolved. Overall 88/219 (40%) versus 92/182 (51%) last week. Same prompt all week (f63b4492, live since 23 Aug). Sequence, not proof the rewrite caused the drop &#8212; volume rose and talk time fell on the same template.</p>
+      <div class="panel">
+        <h3>Sentiment mix</h3>
+        <p class="sub">Direct labels on each bar. Aqua fails contrast on white, so the count sits to the right of the bar.</p>
+        <div style="position:relative">
+          <svg class="chart tall" id="chartSent" viewBox="0 0 1040 160" role="img" aria-label="Calls by sentiment"></svg>
+        </div>
+      </div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Sentiment</th><th class="n">n</th><th class="n">Resolved</th><th class="n">Avg sent.</th><th class="n">Effectiveness</th><th class="n">Coherence</th></tr></thead>
+          <tbody>
+            <tr><td>neutral</td><td class="n">183</td><td class="n">62</td><td class="n">0.06</td><td class="n">4.84</td><td class="n">5.90</td></tr>
+            <tr><td>positive</td><td class="n">20</td><td class="n">20</td><td class="n">0.49</td><td class="n">7.78</td><td class="n">7.95</td></tr>
+            <tr><td>mixed</td><td class="n">16</td><td class="n">6</td><td class="n">-0.02</td><td class="n">5.22</td><td class="n">5.59</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">Live voice is Gemini Live 2.5 Flash native audio: 1,894 generations, 40.9M input tokens, <b>unpriced</b> in PostHog (do not read that as zero). Analysis is gpt-4o on Azure: 219 generations, $4.11, 0 errors, 10.4 s average latency.</p>
+    </section>
+
+    <section id="s04">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">04 &#183; Findings</p>
+          <h2>Ranked, with owners</h2>
+        </div>
+      </div>
+      <div class="findings">
+
+        <article class="finding degraded">
+          <div class="fhead">
+            <span class="fid">F9</span>
+            <span class="chip sev-degraded">Degraded</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">41 preset attempts</span>
+            <span class="chip">12 days running</span>
+          </div>
+          <p>Human transfer has not connected once since 24 Aug. This week every attempt used the preset destination: 38 unanswered plus 3 TRANSFER_FAILED, and zero connected. Last successful transfer is still 24 Aug 09:49 UTC. Escalations ran every day, including four already on the 5 Sep partial morning.</p>
+          <p>Observable: the target source stayed on preset and connected transfers stayed at zero. Last week&#8217;s inference &#8212; that someone changed the destination around the 25 Aug console session &#8212; still has no telephony confirmation of the number. Do not tell the customer the switch is broken until that check lands. This is now week two of a dead dest, on a busier desk.</p>
+          <div class="fix"><b>Fix.</b> MagickVoice telephony confirms the preset destination and SIP/PSTN error on the 41 call IDs from 29 Aug&#8211;5 Sep. CS asks BKP Homes whether they meant to leave the roster. Owner: MagickVoice telephony, then CS.</div>
+          <p class="evidence">call_completed is_escalated: preset n=41 (unanswered 38, TRANSFER_FAILED 3, connected 0); roster n=0. Last unanswered 2026-09-05 06:21. Last connected transfer remains 2026-08-24 09:49 (ledger).</p>
+        </article>
+
+        <article class="finding degraded">
+          <div class="fhead">
+            <span class="fid">F1</span>
+            <span class="chip sev-degraded">Degraded</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">3 failures</span>
+            <span class="chip">22 days running</span>
+          </div>
+          <p>Three callers who asked for a person hit TRANSFER_FAILED &#8212; 3 of 41 this week, up from 2 of 34. All three are on the preset path (29 Aug 15:27, 30 Aug 06:08, 31 Aug 04:37). No TRANSFER_FAILED after 31 Aug; the live form of the break is unanswered (F9), not this error code. The call still connects and talks (87.7 s average on the failures). The break is the handoff, not the voice path.</p>
+          <div class="fix"><b>Fix.</b> Same owner as F9. This is week four with no destination check on the record. MagickVoice telephony pulls those three call IDs with the 38 preset unanswered.</div>
+          <p class="evidence">call_completed error_code=TRANSFER_FAILED n=3, first 2026-08-29 15:27, last 2026-08-31 04:37 &#183; escalate_human total 41 (0 connected / 38 unanswered / 3 failed)</p>
+        </article>
+
+        <article class="finding friction">
+          <div class="fhead">
+            <span class="fid">F4</span>
+            <span class="chip sev-friction">Friction</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">88 / 219 resolved</span>
+            <span class="chip">24 days running</span>
+          </div>
+          <p>The agent takes every call and closes two in five, by its own scoring. That is a step down from last week&#8217;s 51%. The bulk is still neutral with a 34 percent resolution rate inside that bulk &#8212; the standard polite-but-not-closing shape, worse than last week&#8217;s 43 percent inside the neutrals. Same prompt (f63b4492) all week; they did not rewrite it. Busiest day (4 Sep, 46 analyzed) resolved only 33%.</p>
+          <p>Resolution is model-scored, not a customer-confirmed outcome. Volume up and talk time down can move this number without a prompt change.</p>
+          <div class="fix"><b>Fix.</b> CS reviews 8&#8211;10 recent neutral/unresolved transcripts with BKP Homes against the 22 Aug prompt (f63b4492), especially 4 Sep. Prompt owner iterates the close: appointment, quote, or transfer &#8212; pick one. Transfer only works if F9 is fixed first.</div>
+          <p class="evidence">call_analyzed GROUP BY sentiment_label &#8212; resolved 88 / n 219 (neutral 62/183, positive 20/20, mixed 6/16) &#183; prior 7d 92/182 &#183; prompt_updated n=0 this week</p>
+        </article>
+
+        <article class="finding degraded">
+          <div class="fhead">
+            <span class="fid">F2</span>
+            <span class="chip sev-degraded">Degraded</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">2 failures</span>
+            <span class="chip">24 days running</span>
+          </div>
+          <p>The always-on automation that texts WhatsApp and posts a webhook dropped the webhook twice this week (4 Sep 06:10 and 5 Sep 03:17), then sent 4 more after the last miss. Last week was 1 of 106. The channel is not off &#8212; last send 5 Sep 06:21.</p>
+          <p>Loki webhook-dispatch logged 700 lines, all info &#8212; the product event is still the only failure signal. Each failure released a credit; neither settled. WhatsApp on the same automation sent 97/97.</p>
+          <div class="fix"><b>Fix.</b> MagickVoice integrations pull the failed action payloads and the customer webhook HTTP status around 4 Sep 06:10 and 5 Sep 03:17. BKP Homes checks the receiving endpoint. Quiet enough that this is week-four hygiene, not a fire.</div>
+          <p class="evidence">automation_action_completed automation_id=20ac9873-d23a-4398-b94d-94e176fa14b1 channel=webhook sent 95 / failed 2, last fail 2026-09-05 03:17, sent after last fail n=4 &#183; messages_dispatched whatsapp_personal 214/214 success</p>
+        </article>
+
+        <article class="finding">
+          <div class="fhead">
+            <span class="fid">F6</span>
+            <span class="chip sev-friction">Friction</span>
+            <span class="chip resolved">Resolved 2026-08-25</span>
+            <span class="chip">0 roster attempts</span>
+            <span class="chip">staffing unmeasured</span>
+          </div>
+          <p>No roster transfer ran this week. The last roster attempt was 25 Aug (no_answer). The unanswered count this week is entirely F9 preset fails &#8212; do not add them here. Staffing on the old roster is no longer observable; they switched away.</p>
+          <div class="fix"><b>Fix.</b> Closed as a roster finding. Coverage talk now sits on whatever dest F9 confirms. Owner: CS, only after telephony names the number.</div>
+          <p class="evidence">call_completed escalation_target_source=roster n=0 this window &#183; last roster attempt 2026-08-25 (ledger)</p>
+        </article>
+
+        <article class="finding">
+          <div class="fhead">
+            <span class="fid">F10</span>
+            <span class="chip sev-degraded">Degraded</span>
+            <span class="chip resolved">Resolved 2026-08-25</span>
+            <span class="chip">0 WhatsApp fails</span>
+            <span class="chip">held all week</span>
+          </div>
+          <p>WhatsApp personal stayed up. 214 of 214 messages_dispatched succeeded. Automation WhatsApp actions: 97 + 96 + 15 + 6 sent, 0 failed. No QR view, no relink. The session-down alert from last week still does not exist &#8212; we would learn the next drop from a weekly review again.</p>
+          <div class="fix"><b>Fix.</b> MagickVoice messaging still needs a session-down alert. No customer action this week.</div>
+          <p class="evidence">automation_action_completed whatsapp_personal failed n=0 &#183; messages_dispatched whatsapp_personal template 214/214 &#183; Loki greenapi-adapter info n=213, error n=0</p>
+        </article>
+
+        <article class="finding verify">
+          <div class="fhead">
+            <span class="fid">F3</span>
+            <span class="chip sev-verify">Verify</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">252 warnings</span>
+            <span class="chip">47 days running</span>
+          </div>
+          <p>Voice minutes are not going through the credit ledger this tenant emits. Settlement-service warned 252 times this week, and credit_settled is zero for 30 days while other tenants settle thousands a day (baseline, not this week&#8217;s volume).</p>
+          <p>This is not &#8220;credit is leaking.&#8221; Nothing was reserved for the call in the first place (reserves this week are only WhatsApp 10.7 and webhook 0.97 estimated credits). Reconcile against the billing ledger before anyone mentions money on a call.</p>
+          <div class="fix"><b>Fix.</b> MagickVoice platform/billing: confirm whether inbound Gemini Live is supposed to reserve+settle, and whether BKP Homes is billed on a different path. Do not open a customer credit conversation until the ledger agrees.</div>
+          <p class="evidence">Loki MagickVoice-Platform component=settlement-service warn n=252 &#183; credit_reserved voice=0; workflow whatsapp 214 / webhook 97 &#183; credit_released n=2 (same timestamps as F2) &#183; credit_settled this_tenant=0 every day in 30d baseline; all_tenants up to 5,091/day</p>
+        </article>
+
+        <article class="finding friction">
+          <div class="fhead">
+            <span class="fid">F5</span>
+            <span class="chip sev-friction">Friction</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">253 / 253 fallback</span>
+            <span class="chip">21 never reached voice</span>
+          </div>
+          <p>The IVR still does not route. Every inbound resolves as ivr_fallback with matched_intent false, then most callers land on the AI agent. 21 of 251 completed IVR sessions (8%) never start a voice call &#8212; they leave at play_ring, before ai_handoff_1. Two more inbound_call_resolved rows have no ivr_session_completed. Same workflow (b4efe18c), zero variables collected all week. They did not edit the tree.</p>
+          <p>Absent intents is not declined intents. If the IVR is meant to be a passthrough, the unmatched-intent metric is a miss we invented.</p>
+          <div class="fix"><b>Fix.</b> CS and BKP Homes listen to the IVR greeting and decide whether DTMF/intent branches should exist. If it is a passthrough, hide the unmatched-intent metric so it stops looking like a miss.</div>
+          <p class="evidence">inbound_call_resolved resolution_type=ivr_fallback matched_intent=false n=253 &#183; ivr_session_completed workflow=b4efe18c last_step ai_handoff_1 n=230 / play_ring n=21 &#183; variables_collected=0</p>
+        </article>
+
+        <article class="finding verify">
+          <div class="fhead">
+            <span class="fid">F11</span>
+            <span class="chip sev-verify">Verify</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">1 / 230</span>
+            <span class="chip">13 days running</span>
+          </div>
+          <p>One call ended AI_PIPELINE_ERROR (4 Sep 11:03, call 20024586, 96 s talk). It still connected. Last week this count was 2. n=1 is too small for a rate claim. Loki call-session warned twice and did not group on a message key, so we do not have the model error text.</p>
+          <div class="fix"><b>Fix.</b> MagickVoice voice/platform pulls that one call ID from orchestrator call-session. Do not brief the customer on a pipeline error rate.</div>
+          <p class="evidence">call_completed status=failed outcome=ai_pipeline_error n=1 at 2026-09-04 11:03 &#183; Loki Orchestrator call-session warn n=2, 0 error-level lines</p>
+        </article>
+
+        <article class="finding noise">
+          <div class="fhead">
+            <span class="fid">F7</span>
+            <span class="chip sev-noise">Noise</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">4 of 4 api_errors</span>
+            <span class="chip">chronic four weeks</span>
+          </div>
+          <p>Every console error this week is GET /threads/by-call/:id returning 404. That is an expected empty transcript, reported as an error. It is the entire 4-row list (30 Aug and 1 Sep). Last week&#8217;s 29 is the same endpoint, quieter. Last seen 1 Sep 10:00. Loki Platform 404s match: 3 on fb84af0c, 1 on 7cd968fe.</p>
+          <div class="fix"><b>Fix.</b> MagickVoice product: stop emitting api_error for empty thread lookups. No customer action.</div>
+          <p class="evidence">api_error 7d: 404 /threads/by-call/:id n=4, first 2026-08-30 09:40, last 2026-09-01 10:00. Loki Platform statusCode 200=949, 404=4, 5xx=0</p>
+        </article>
+
+        <article class="finding friction">
+          <div class="fhead">
+            <span class="fid">F8</span>
+            <span class="chip sev-friction">Friction</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">2 dead clicks</span>
+            <span class="chip">0 rage clicks</span>
+          </div>
+          <p>Dead clicks fell from 15 to 2. Both landed on /super-admin/usage with 0 pageviews on that path (an SPA route the $pageview list never saw). Last week that cluster was gone; it is back. The console they actually load is /app/calls (15 of 21 views) plus /login (4) and one call-detail URL. Last dead click 31 Aug.</p>
+          <div class="fix"><b>Fix.</b> MagickVoice product treats usage and call-detail views as first-class pageviews before anyone briefs &#8220;they are fighting the UI.&#8221; CS can ignore this in the customer conversation.</div>
+          <p class="evidence">$dead_click + $pageview GROUP BY $pathname &#8212; /super-admin/usage 2/0 &#183; $pageview /app/calls 15, /login 4, /app/calls/:id 2 &#183; 2 users, 16 sessions</p>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="s05">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">05 &#183; Error surface</p>
+          <h2>Where the errors actually came from</h2>
+        </div>
+      </div>
+      <p class="prose">Loki scanned ~980k lines for this tenant over the same seven days. Zero error-level lines. The warning pile is almost entirely settlement-service (252) plus 27 BYOC phone-number 404s from customer-ui and 2 orchestrator call-session warns. GreenAPI (WhatsApp) 213/213 info. Webhook-dispatch 700/700 info &#8212; the 2 product-side webhook failures never became a server error. Platform mean latency 19 ms, p95 55 ms.</p>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Source</th><th>What</th><th class="n">n</th><th>Whose fault</th></tr></thead>
+          <tbody>
+            <tr><td>Platform / settlement-service</td><td>warn: no reservation to settle</td><td class="n">252</td><td>Platform instrumentation</td></tr>
+            <tr><td>PostHog call_completed</td><td>preset transfer unanswered / failed</td><td class="n">41</td><td>Destination / telephony (F9)</td></tr>
+            <tr><td>Platform / byoc-phone-number-service</td><td>warn 404, originator customer-ui</td><td class="n">27</td><td>Console lookup, empty number</td></tr>
+            <tr><td>PostHog api_error</td><td>404 threads by call</td><td class="n">4</td><td>Expected empty, noisy</td></tr>
+            <tr><td>PostHog call_completed</td><td>TRANSFER_FAILED</td><td class="n">3</td><td>Telephony / destination</td></tr>
+            <tr><td>Orchestrator</td><td>call-session warn</td><td class="n">2</td><td>Unknown (no msg key)</td></tr>
+            <tr><td>PostHog automation</td><td>webhook action failed</td><td class="n">2</td><td>Customer endpoint or adapter</td></tr>
+            <tr><td>PostHog call_completed</td><td>AI_PIPELINE_ERROR</td><td class="n">1</td><td>Voice pipeline (verify)</td></tr>
+            <tr><td>PostHog automation</td><td>WhatsApp action failed</td><td class="n">0</td><td>&#8212;</td></tr>
+            <tr><td>Platform HTTP 5xx</td><td>upstream failure</td><td class="n">0</td><td>&#8212;</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="s06">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">06 &#183; Timeline</p>
+          <h2>What happened this week</h2>
+        </div>
+      </div>
+      <ul class="tl">
+        <li>
+          <div class="tldate">29 Aug</div>
+          <div class="tldotwrap"><div class="tldot accent"></div></div>
+          <div>Partial morning from 06:30 UTC, then a full afternoon. 25 inbound / 22 connected. Account Sreenidhi_vijayawada created 09:45. First TRANSFER_FAILED of the week 15:27. 4 preset escalations, 0 connected. Third weekly review published at the window open.</div>
+        </li>
+        <li>
+          <div class="tldate">30 Aug</div>
+          <div class="tldotwrap"><div class="tldot warn"></div></div>
+          <div>41 connected. Campaign composer opened (Inbound + the new account identified). Second TRANSFER_FAILED 06:08. 1 thread 404. 4 pageviews.</div>
+        </li>
+        <li>
+          <div class="tldate">31 Aug</div>
+          <div class="tldotwrap"><div class="tldot warn"></div></div>
+          <div>45 connected (then the week&#8217;s second-busiest day). Last TRANSFER_FAILED 04:37. One 300 s timeout at 14:22. Both dead clicks on /super-admin/usage. Extra Default key 3d4ab1ca identified.</div>
+        </li>
+        <li>
+          <div class="tldate">1 Sep</div>
+          <div class="tldotwrap"><div class="tldot warn"></div></div>
+          <div>Quiet voice day (19 connected) after a 25-inbound morning. 5 play_ring dropoffs. Last thread 404s of the week (3). One auth_succeeded 09:24. 7 preset unanswered, 0 connected.</div>
+        </li>
+        <li>
+          <div class="tldate">2 Sep</div>
+          <div class="tldotwrap"><div class="tldot good"></div></div>
+          <div>17/17 connected, 0 play_ring, 1 preset unanswered, 0 api_errors. Lightest full day. 4 pageviews.</div>
+        </li>
+        <li>
+          <div class="tldate">3 Sep</div>
+          <div class="tldotwrap"><div class="tldot warn"></div></div>
+          <div>24/24 connected. Best model-scored day (56.5% resolved). 7 preset unanswered. 1 pageview.</div>
+        </li>
+        <li>
+          <div class="tldate">4 Sep</div>
+          <div class="tldotwrap"><div class="tldot serious"></div></div>
+          <div>Busiest full day: 52 inbound / 46 connected. 5 play_ring. First webhook fail 06:10. AI_PIPELINE_ERROR 11:03. Second 300 s timeout 14:31. 8 preset unanswered. Resolution 33% on 46 scored calls.</div>
+        </li>
+        <li>
+          <div class="tldate">5 Sep</div>
+          <div class="tldotwrap"><div class="tldot warn"></div></div>
+          <div>Partial day to 06:30 UTC: 19 inbound / 16 connected, 3 play_ring, 4 preset unanswered already. Second webhook fail 03:17, then 4 webhook sends through 06:21. Last WhatsApp send 06:21. Fourth weekly review published.</div>
+        </li>
+      </ul>
+    </section>
+
+    <section id="s07">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">07 &#183; Adoption &amp; friction</p>
+          <h2>They opened the composer, then went back to the call list</h2>
+        </div>
+      </div>
+      <p class="prose">2 console users and 16 sessions &#8212; seats held, they did not grow. 15 of 21 pageviews are /app/calls. They opened the campaign composer on 30 Aug and clicked a dashboard channel card twice. They did not edit a prompt, an IVR, or a WhatsApp connection. They do not live in knowledge or WebRTC (zero webrtc_* events). No 403s and no feature_gate_unavailable &#8212; nothing they open is gated shut. &#8220;Absent&#8221; outbound and campaigns is unused, not declined; there is no 403 trail showing they tried. Last pageview 5 Sep 06:02. Growing seat count is the leading indicator in this series: 2 and 2 is flat, on a small denominator. A fifth account (Sreenidhi_vijayawada) exists and has not taken traffic.</p>
+      <div class="panel">
+        <h3>Period over period</h3>
+        <table>
+          <thead><tr><th>Period</th><th class="n">Calls</th><th class="n">Connected</th><th class="n">Talk min</th><th class="n">Auto triggers</th><th class="n">Auto failed</th><th class="n">API errors</th><th class="n">Console users</th></tr></thead>
+          <tbody>
+            <tr><td>last 7d</td><td class="n">230</td><td class="n">230</td><td class="n">306.0</td><td class="n">876</td><td class="n">2</td><td class="n">4</td><td class="n">2</td></tr>
+            <tr><td>prior 7d</td><td class="n">185</td><td class="n">185</td><td class="n">302.0</td><td class="n">728</td><td class="n">7</td><td class="n">29</td><td class="n">2</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <h3>Automations &#8212; triggered vs matched vs sent</h3>
+        <p class="sub">876 triggers vs 311 completions looked like a reliability hole. It is not. Four automations fire on every analysis.ready; 565 of 876 did not match. When matched, WhatsApp sends. Webhook is the remaining miss (F2).</p>
+        <table>
+          <thead><tr><th>Automation</th><th class="n">Triggered</th><th class="n">Matched</th><th>When matched</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">20ac9873</td><td class="n">219</td><td class="n">97</td><td>2 actions: WhatsApp 97 sent, webhook 95 sent / 2 failed</td></tr>
+            <tr><td class="mono">f82aac6f</td><td class="n">219</td><td class="n">96</td><td>WhatsApp 96 sent</td></tr>
+            <tr><td class="mono">5e36afed</td><td class="n">219</td><td class="n">15</td><td>WhatsApp 15 sent</td></tr>
+            <tr><td class="mono">37c49837</td><td class="n">219</td><td class="n">6</td><td>WhatsApp 6 sent</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <details class="appendix">
+        <summary>Appendix &#8212; daily table (chart data)</summary>
+        <table style="margin-top:12px">
+          <thead><tr><th>Day (UTC)</th><th class="n">Inbound</th><th class="n">Initiated</th><th class="n">Connected</th><th class="n">Failed</th><th class="n">API errors</th><th class="n">Pageviews</th><th class="n">Users</th></tr></thead>
+          <tbody id="dailyBody"></tbody>
+        </table>
+      </details>
+    </section>
+
+    <section id="s08">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">08 &#183; Recommendation</p>
+          <h2>Ordered by consequence</h2>
+        </div>
+      </div>
+      <div class="recs">
+        <div class="rec"><div class="rn">1</div><div><b>Put human transfer on a destination that answers.</b> 12 days, 41 of 41 preset attempts failed. Confirm the number. The roster finding is closed; coverage talk waits on that dest.<div class="owner">Owner: MagickVoice telephony, then CS &#183; F9, F1</div></div></div>
+        <div class="rec"><div class="rn">2</div><div><b>Spend the renewal hour on close rate and the transfer dest, not uptime.</b> Uptime is not the story. Volume is up. Model-scored resolution is down to 40% on the same prompt.<div class="owner">Owner: CS + BKP Homes prompt owner &#183; F4, F9</div></div></div>
+        <div class="rec"><div class="rn">3</div><div><b>Reconcile voice credits against the ledger before any billing conversation.</b> 252 &#8220;nothing to settle&#8221; warnings and a 30-day empty credit_settled series are an instrumentation question.<div class="owner">Owner: MagickVoice platform / billing &#183; F3</div></div></div>
+        <div class="rec"><div class="rn">4</div><div><b>Decide what the IVR is for.</b> 253 unmatched fallbacks and an 8% hangup at play_ring. Either add branches or stop measuring it as a miss.<div class="owner">Owner: CS + BKP Homes &#183; F5</div></div></div>
+        <div class="rec"><div class="rn">5</div><div><b>Alert when WhatsApp session dies.</b> It held this week. The gap is still that a weekly review is the detector.<div class="owner">Owner: MagickVoice messaging &#183; F10</div></div></div>
+      </div>
+    </section>
+
+    <section id="s09">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">09 &#183; Method</p>
+          <h2>What these numbers can and cannot say</h2>
+        </div>
+      </div>
+      <ul class="prose method">
+        <li><b>Fourth weekly run.</b> Identity, F-numbers, and history before 29 Aug come from MEMORIES.md. Account age (91 days) is from groups.created_at, not a range scan. New account Sreenidhi_vijayawada (db5c9cfe, created 2026-08-29) was appended from a property read on account_id; it emitted identify plus campaign_composer_opened only.</li>
+        <li><b>Windows.</b> PostHog events and Loki logs both cover 2026-08-29 06:30 UTC to 2026-09-05 06:30 UTC (7 days). Both sources cover the same seven days. 29 Aug and 5 Sep are partial UTC days. Credit_settled baseline is 30 days and is labelled as baseline, not customer volume.</li>
+        <li><b>Sources.</b> PostHog project 454290, filter $group_0 = b741952f-e815-430b-8136-8b4b59070a3e. Loki {deployment_environment="production", service_name=~"MagickVoice.*"} | tenantId= that UUID. Short token <span class="mono">bkp</span>. Section 4 name resolution was skipped; stored IDs returned data.</li>
+        <li><b>Prometheus.</b> Instant <span class="mono">count by (__name__) ({tenant=~".+"})</span> on grafanacloud-prom returned empty. No metric carries a tenant label. Checked once.</li>
+        <li><b>Governed catalog consulted: no match</b> for a named tenant health metric; all figures below are noncanonical event/log aggregations.</li>
+        <li><b>Resolution and sentiment</b> are model-scored from call_analyzed, not customer-confirmed outcomes.</li>
+        <li><b>Connect rate</b> uses properties.connected (230/230). <b>Success rate</b> uses status (229/230 not failed vs 1 failed). They disagree this week.</li>
+        <li><b>Gemini Live cost</b> is unpriced in PostHog, not zero.</li>
+        <li><b>matched_intent on call_completed</b> is in the schema but unused for intent claims; inbound_call_resolved is the source (253/253 false).</li>
+        <li><b>Denominators under 10</b> are labelled: TRANSFER_FAILED 3/41, webhook failed 2/97, pipeline error 1/230, mixed resolved 6/16, 300 s timeouts n=2, dead clicks n=2, api_error n=4.</li>
+        <li><b>F6 and F10</b> stay on the ledger as resolved. F6 no longer appears in this week&#8217;s data; F10 held at zero WhatsApp fails.</li>
+        <li><b>Cannot tell:</b> whether voice minutes are billed on a path we do not emit; the HTTP status of the 2 webhook failures (no Loki error line); the body of the 2 call-session warns; whether the preset number is wrong or the carrier is rejecting it; anything before 29 Aug except the ledger and the 30d credit baseline.</li>
+      </ul>
+    </section>
+  </div>
+  <script>
+    (function () {
+      var DAYS = [
+        { d: '29', label: 'Sat 29*', inbound: 25, connected: 22, api: 0, views: 0, users: 0 },
+        { d: '30', label: 'Sun 30', inbound: 43, connected: 41, api: 1, views: 4, users: 1 },
+        { d: '31', label: 'Mon 31', inbound: 48, connected: 45, api: 0, views: 4, users: 2 },
+        { d: '1', label: 'Tue 1', inbound: 25, connected: 19, api: 3, views: 4, users: 1 },
+        { d: '2', label: 'Wed 2', inbound: 17, connected: 17, api: 0, views: 4, users: 1 },
+        { d: '3', label: 'Thu 3', inbound: 24, connected: 24, api: 0, views: 1, users: 1 },
+        { d: '4', label: 'Fri 4', inbound: 52, connected: 46, api: 0, views: 3, users: 1 },
+        { d: '5', label: 'Sat 5*', inbound: 19, connected: 16, api: 0, views: 1, users: 1 }
+      ];
+      var SENT = [
+        { k: 'neutral', n: 183, color: 'var(--cat-blue)' },
+        { k: 'positive', n: 20, color: 'var(--cat-aqua)' },
+        { k: 'mixed', n: 16, color: 'var(--cat-orange)' }
+      ];
+
+      function css(name) {
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      }
+      function svgEl(n, a) {
+        var e = document.createElementNS('http://www.w3.org/2000/svg', n);
+        for (var k in a) e.setAttribute(k, a[k]);
+        return e;
+      }
+      function roundRect(x, y, w, h, r) {
+        var rr = Math.min(r, w / 2, h / 2);
+        return 'M' + (x + rr) + ',' + y +
+          ' H' + (x + w - rr) +
+          ' Q' + (x + w) + ',' + y + ' ' + (x + w) + ',' + (y + rr) +
+          ' V' + (y + h) +
+          ' H' + x +
+          ' V' + (y + rr) +
+          ' Q' + x + ',' + y + ' ' + (x + rr) + ',' + y + ' Z';
+      }
+
+      function groupedBars(svgId, tipId, keys, colors, maxY) {
+        var svg = document.getElementById(svgId);
+        var tip = document.getElementById(tipId);
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+        var W = 1040, H = 220, L = 44, R = 16, T = 18, B = 36;
+        var innerW = W - L - R, innerH = H - T - B;
+        var n = DAYS.length;
+        var groupW = innerW / n;
+        var gap = 2;
+        var barW = (groupW - 16 - gap) / keys.length;
+        var ink3 = css('--ink-3') || '#7f8a87';
+        var grid = css('--grid') || '#e8ebe9';
+
+        for (var g = 0; g <= 4; g++) {
+          var gy = T + innerH - (innerH * g / 4);
+          var ln = svgEl('line', { x1: L, x2: W - R, y1: gy, y2: gy, stroke: grid, 'stroke-width': 1 });
+          svg.appendChild(ln);
+          var tx = svgEl('text', { x: L - 8, y: gy + 4, 'text-anchor': 'end', fill: ink3, 'font-size': 11, 'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace' });
+          tx.textContent = String(Math.round(maxY * g / 4));
+          svg.appendChild(tx);
+        }
+        DAYS.forEach(function (row, i) {
+          var gx = L + i * groupW + 8;
+          keys.forEach(function (key, ki) {
+            var v = row[key];
+            var bh = maxY ? (v / maxY) * innerH : 0;
+            var x = gx + ki * (barW + gap);
+            var y = T + innerH - bh;
+            var col = colors[ki];
+            var p = svgEl('path', { d: roundRect(x, y, barW, Math.max(bh, 0), 4), fill: col, 'data-i': i, 'data-k': key });
+            p.addEventListener('mousemove', function (ev) {
+              tip.style.display = 'block';
+              tip.textContent = row.label + ' \u00b7 ' + key + ' ' + v;
+              var rect = svg.getBoundingClientRect();
+              tip.style.left = (ev.clientX - rect.left) + 'px';
+              tip.style.top = (ev.clientY - rect.top) + 'px';
+            });
+            p.addEventListener('mouseleave', function () { tip.style.display = 'none'; });
+            svg.appendChild(p);
+            if (v > 0) {
+              var other = keys.length === 2 ? row[keys[1 - ki]] : v;
+              var lift = (keys.length === 2 && Math.abs(v - other) < 10 && v >= other) ? 11 : 0;
+              var lab = svgEl('text', {
+                x: x + barW / 2, y: y - 4 - lift, 'text-anchor': 'middle', fill: ink3,
+                'font-size': 10, 'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace'
+              });
+              lab.textContent = String(v);
+              svg.appendChild(lab);
+            }
+          });
+          var lx = svgEl('text', {
+            x: gx + (keys.length * (barW + gap)) / 2, y: H - 12, 'text-anchor': 'middle', fill: ink3,
+            'font-size': 11, 'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace'
+          });
+          lx.textContent = row.label;
+          svg.appendChild(lx);
+        });
+      }
+
+      function apiBars() {
+        var svg = document.getElementById('chartApi');
+        var tip = document.getElementById('tipApi');
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+        var W = 1040, H = 160, L = 44, R = 16, T = 18, B = 36;
+        var innerW = W - L - R, innerH = H - T - B;
+        var maxY = 4;
+        var n = DAYS.length;
+        var groupW = innerW / n;
+        var barW = groupW - 20;
+        var ink3 = css('--ink-3') || '#7f8a87';
+        var grid = css('--grid') || '#e8ebe9';
+        var orange = css('--cat-orange') || '#eb6834';
+        for (var g = 0; g <= 4; g++) {
+          var gy = T + innerH - (innerH * g / 4);
+          svg.appendChild(svgEl('line', { x1: L, x2: W - R, y1: gy, y2: gy, stroke: grid, 'stroke-width': 1 }));
+          var tx = svgEl('text', { x: L - 8, y: gy + 4, 'text-anchor': 'end', fill: ink3, 'font-size': 11, 'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace' });
+          tx.textContent = String(Math.round(maxY * g / 4));
+          svg.appendChild(tx);
+        }
+        DAYS.forEach(function (row, i) {
+          var v = row.api;
+          var bh = (v / maxY) * innerH;
+          var x = L + i * groupW + 10;
+          var y = T + innerH - bh;
+          var p = svgEl('path', { d: roundRect(x, y, barW, Math.max(bh, 0), 4), fill: orange });
+          p.addEventListener('mousemove', function (ev) {
+            tip.style.display = 'block';
+            tip.textContent = row.label + ' \u00b7 api_error ' + v;
+            var rect = svg.getBoundingClientRect();
+            tip.style.left = (ev.clientX - rect.left) + 'px';
+            tip.style.top = (ev.clientY - rect.top) + 'px';
+          });
+          p.addEventListener('mouseleave', function () { tip.style.display = 'none'; });
+          svg.appendChild(p);
+          if (v > 0) {
+            var lab = svgEl('text', {
+              x: x + barW / 2, y: y - 4, 'text-anchor': 'middle', fill: ink3,
+              'font-size': 10, 'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace'
+            });
+            lab.textContent = String(v);
+            svg.appendChild(lab);
+          }
+          var lx = svgEl('text', {
+            x: x + barW / 2, y: H - 12, 'text-anchor': 'middle', fill: ink3,
+            'font-size': 11, 'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace'
+          });
+          lx.textContent = row.label;
+          svg.appendChild(lx);
+        });
+      }
+
+      function sentBars() {
+        var svg = document.getElementById('chartSent');
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+        var W = 1040, H = 160, L = 90, R = 48, T = 12, B = 16;
+        var innerW = W - L - R, innerH = H - T - B;
+        var maxY = 183;
+        var rowH = innerH / SENT.length;
+        var ink = css('--ink') || '#0d1211';
+        var ink3 = css('--ink-3') || '#7f8a87';
+        SENT.forEach(function (s, i) {
+          var y = T + i * rowH + 8;
+          var bw = (s.n / maxY) * innerW;
+          var lb = svgEl('text', {
+            x: L - 10, y: y + 14, 'text-anchor': 'end', fill: ink3,
+            'font-size': 12, 'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace'
+          });
+          lb.textContent = s.k;
+          svg.appendChild(lb);
+          svg.appendChild(svgEl('path', { d: roundRect(L, y, Math.max(bw, 2), 22, 4), fill: s.color }));
+          var lab = svgEl('text', {
+            x: L + bw + 8, y: y + 16, fill: ink,
+            'font-size': 12, 'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace'
+          });
+          lab.textContent = String(s.n);
+          svg.appendChild(lab);
+        });
+      }
+
+      function fillTable() {
+        var body = document.getElementById('dailyBody');
+        var rows = [
+          ['2026-08-29*', 25, 22, 22, 0, 0, 0, 0],
+          ['2026-08-30', 43, 41, 41, 0, 1, 4, 1],
+          ['2026-08-31', 48, 45, 45, 0, 0, 4, 2],
+          ['2026-09-01', 25, 19, 19, 0, 3, 4, 1],
+          ['2026-09-02', 17, 17, 17, 0, 0, 4, 1],
+          ['2026-09-03', 24, 24, 24, 0, 0, 1, 1],
+          ['2026-09-04', 52, 46, 46, 1, 0, 3, 1],
+          ['2026-09-05*', 19, 16, 16, 0, 0, 1, 1]
+        ];
+        rows.forEach(function (r) {
+          var tr = document.createElement('tr');
+          r.forEach(function (c, i) {
+            var td = document.createElement('td');
+            if (i) td.className = 'n';
+            td.textContent = String(c);
+            tr.appendChild(td);
+          });
+          body.appendChild(tr);
+        });
+      }
+
+      function draw() {
+        groupedBars('chartCalls', 'tipCalls', ['inbound', 'connected'], [css('--cat-blue') || '#2a78d6', css('--cat-aqua') || '#1baf7a'], 56);
+        apiBars();
+        sentBars();
+      }
+
+      var btn = document.getElementById('themeBtn');
+      function applyTheme(t) {
+        if (t) document.documentElement.setAttribute('data-theme', t);
+        else document.documentElement.removeAttribute('data-theme');
+        requestAnimationFrame(draw);
+      }
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme');
+        if (cur === 'dark') applyTheme('light');
+        else if (cur === 'light') applyTheme(null);
+        else applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark');
+      });
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+        if (!document.documentElement.getAttribute('data-theme')) draw();
+      });
+      fillTable();
+      draw();
+    })();
+  </script>
+</body>
+
+</html>

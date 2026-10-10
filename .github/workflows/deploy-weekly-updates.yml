@@ -6,11 +6,13 @@ on:
       - main
     paths:
       - "weekly-updates/**"
+      - "assets/**"
       - "scripts/build_weekly_updates_site.py"
       - ".github/workflows/deploy-weekly-updates.yml"
   pull_request:
     paths:
       - "weekly-updates/**"
+      - "assets/**"
       - "scripts/build_weekly_updates_site.py"
       - ".github/workflows/deploy-weekly-updates.yml"
       - "tests/test_build_weekly_updates_site.py"

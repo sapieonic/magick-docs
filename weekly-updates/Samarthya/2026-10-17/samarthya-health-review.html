@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Samarthya Health Review</title>
+  <meta name="description" content="Voice, console, and instrumentation for Samarthya over 10-17 Oct 2026.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232a78d6'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='white' font-family='system-ui' font-size='16' font-weight='700'%3ES%3C/text%3E%3C/svg%3E">
+<style>
+    :root {
+      --plane:#f4f6f5;
+      --surface:#ffffff;
+      --surface-2:#fafbfa;
+      --ink:#0d1211;
+      --ink-2:#555e5b;
+      --ink-3:#7f8a87;
+      --rule:#e2e6e4;
+      --rule-strong:#c8cfcc;
+      --grid:#e8ebe9;
+      --accent:#2a78d6;
+      --cat-blue:#2a78d6;
+      --cat-orange:#eb6834;
+      --cat-aqua:#1baf7a;
+      --good:#0ca30c;
+      --warning:#fab219;
+      --serious:#ec835a;
+      --critical:#d03b3b;
+      --good-text:#0ca30c;
+      --warning-text:#8a6000;
+      --serious-text:#a94f26;
+      --critical-text:#d03b3b;
+      --shadow: 0 1px 0 rgba(13,18,17,.04);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --plane:#0e1211;
+        --surface:#181c1b;
+        --surface-2:#1d2221;
+        --ink:#f1f4f3;
+        --ink-2:#a6b0ac;
+        --ink-3:#7f8a87;
+        --rule:#272d2b;
+        --rule-strong:#39413e;
+        --grid:#242a28;
+        --accent:#3987e5;
+        --cat-blue:#3987e5;
+        --cat-orange:#d95926;
+        --cat-aqua:#199e70;
+        --good-text:#0ca30c;
+        --warning-text:#fab219;
+        --serious-text:#ec835a;
+        --critical-text:#d03b3b;
+        --shadow: 0 1px 0 rgba(0,0,0,.35);
+      }
+    }
+    :root[data-theme="dark"] {
+      --plane:#0e1211;
+      --surface:#181c1b;
+      --surface-2:#1d2221;
+      --ink:#f1f4f3;
+      --ink-2:#a6b0ac;
+      --ink-3:#7f8a87;
+      --rule:#272d2b;
+      --rule-strong:#39413e;
+      --grid:#242a28;
+      --accent:#3987e5;
+      --cat-blue:#3987e5;
+      --cat-orange:#d95926;
+      --cat-aqua:#199e70;
+      --good-text:#0ca30c;
+      --warning-text:#fab219;
+      --serious-text:#ec835a;
+      --critical-text:#d03b3b;
+      --shadow: 0 1px 0 rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--plane);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 32px 24px 80px; }
+    .prose { max-width: 68ch; }
+    .mono, .eyebrow, .chip, .evidence, th, .idchip, .tick, .delta, .fid {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      font-size: 11px;
+      color: var(--ink-3);
+      margin: 0 0 8px;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      letter-spacing: -.032em;
+      line-height: 1.1;
+      margin: 0 0 12px;
+      font-weight: 650;
+    }
+    h2 {
+      font-size: 1.35rem;
+      letter-spacing: -.02em;
+      margin: 0 0 8px;
+      font-weight: 650;
+    }
+    h3 { font-size: 1rem; margin: 0 0 6px; font-weight: 650; }
+    p { margin: 0 0 12px; }
+    a { color: var(--accent); }
+    .mast {
+      display: flex; justify-content: space-between; gap: 24px; align-items: flex-start;
+      margin-bottom: 28px;
+    }
+    .thesis { color: var(--ink-2); font-size: 1.05rem; max-width: 68ch; }
+    .tools { display: flex; gap: 8px; flex-shrink: 0; }
+    button.theme {
+      background: var(--surface);
+      color: var(--ink);
+      border: 1px solid var(--rule-strong);
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+    }
+    .idrow { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 6px; }
+    .idchip {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      letter-spacing: .04em;
+      color: var(--ink-2);
+      font-variant-numeric: tabular-nums;
+    }
+    .meta { font-size: 12px; color: var(--ink-3); margin-top: 8px; }
+    .rail {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 28px 0 40px;
+    }
+    .vcell {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 16px 16px 14px;
+      box-shadow: var(--shadow);
+    }
+    .vtop { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .vstate {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      font-size: 11px;
+    }
+    .vlabel { font-size: 13px; color: var(--ink-3); margin-bottom: 6px; }
+    .vnote { font-size: 13.5px; color: var(--ink-2); margin: 0; line-height: 1.45; }
+    section { margin: 48px 0; }
+    .sec-head { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; margin-bottom: 16px; }
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+      gap: 12px;
+      margin: 20px 0 28px;
+    }
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .kpi .val {
+      font-size: 1.85rem;
+      font-weight: 650;
+      letter-spacing: -.03em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
+    }
+    .kpi .cap { font-size: 12.5px; color: var(--ink-3); margin-top: 6px; }
+    .delta {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-top: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+    .delta.up { color: var(--good-text); }
+    .delta.down { color: var(--serious-text); }
+    .delta.flat { color: var(--ink-3); }
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 18px 18px 12px;
+      margin: 16px 0;
+    }
+    .chartbox { position: relative; }
+    .panel h3 { color: var(--ink); }
+    .sub { font-size: 13px; color: var(--ink-3); margin: 0 0 12px; }
+    .chart { width: 100%; height: 260px; display: block; }
+    .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--ink-2); margin: 8px 0 0; }
+    .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+    table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 13.5px; }
+    th {
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      font-size: 10.5px;
+      color: var(--ink-3);
+      font-weight: 500;
+      border-bottom: 1px solid var(--rule-strong);
+      padding: 8px 10px;
+    }
+    td { padding: 8px 10px; border-bottom: 1px solid var(--rule); }
+    td.n, th.n { text-align: right; }
+    tr:hover td { background: var(--surface-2); }
+    .findings { display: flex; flex-direction: column; gap: 12px; }
+    .finding {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 16px 18px 14px 18px;
+      border-left: 4px solid var(--rule-strong);
+    }
+    .finding.critical { border-left-color: var(--critical); }
+    .finding.degraded { border-left-color: var(--serious); }
+    .finding.friction { border-left-color: var(--warning); }
+    .finding.noise { border-left-color: var(--ink-3); }
+    .finding.verify { border-left-color: var(--accent); }
+    .fhead { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; }
+    .fid { font-size: 12px; letter-spacing: .08em; color: var(--ink-2); }
+    .chip {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px solid var(--rule);
+      color: var(--ink-2);
+    }
+    .chip.sev-critical { color: var(--critical-text); border-color: var(--critical); }
+    .chip.sev-degraded { color: var(--serious-text); border-color: var(--serious); }
+    .chip.sev-friction { color: var(--warning-text); border-color: var(--warning); }
+    .chip.sev-noise { color: var(--ink-3); }
+    .chip.sev-verify { color: var(--accent); border-color: var(--accent); }
+    .chip.live { color: var(--serious-text); }
+    .chip.resolved { color: var(--good-text); }
+    .fix {
+      background: var(--surface-2);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 14px;
+      margin: 10px 0;
+    }
+    .fix b { font-weight: 650; }
+    .evidence {
+      font-size: 11.5px;
+      color: var(--ink-3);
+      margin: 8px 0 0;
+      word-break: break-word;
+    }
+    .tl { list-style: none; margin: 0; padding: 0; }
+    .tl li {
+      display: grid;
+      grid-template-columns: 92px 16px 1fr;
+      gap: 12px;
+      padding: 0 0 18px;
+    }
+    .tldate {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 11.5px;
+      color: var(--ink-3);
+      text-align: right;
+      padding-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+    .tldotwrap { position: relative; }
+    .tldotwrap:before {
+      content: "";
+      position: absolute;
+      left: 6px; top: 10px; bottom: -18px;
+      width: 1px;
+      background: var(--rule-strong);
+    }
+    .tl li:last-child .tldotwrap:before { display: none; }
+    .tldot {
+      width: 13px; height: 13px; border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--ink-3);
+      position: relative; z-index: 1; margin-top: 4px;
+    }
+    .tldot.good { border-color: var(--good); }
+    .tldot.warn { border-color: var(--warning); }
+    .tldot.serious { border-color: var(--serious); }
+    .tldot.bad { border-color: var(--critical); }
+    .tldot.accent { border-color: var(--accent); }
+    .recs { display: flex; flex-direction: column; gap: 10px; }
+    .rec {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+    }
+    .rn {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 650;
+    }
+    .owner { font-size: 12.5px; color: var(--ink-3); margin-top: 4px; }
+    details.appendix {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-top: 16px;
+    }
+    details.appendix summary { cursor: pointer; font-weight: 650; }
+    .tip {
+      position: absolute;
+      pointer-events: none;
+      background: var(--ink);
+      color: var(--plane);
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      transform: translate(-50%, -120%);
+      display: none;
+      z-index: 5;
+    }
+    .method li { margin-bottom: 6px; }
+    .scroll { overflow-x: auto; }
+    @media (max-width: 860px) {
+      .rail { grid-template-columns: 1fr 1fr; }
+      .mast { flex-direction: column; }
+      .tl li { grid-template-columns: 72px 16px 1fr; }
+    }
+    @media (max-width: 560px) {
+      .rail { grid-template-columns: 1fr; }
+    }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="mast">
+      <div>
+        <p class="eyebrow">Customer health review &#183; dedicated</p>
+        <h1>Samarthya</h1>
+        <p class="thesis">The factory stayed on the servers through Thursday. The scoreboard has been blank since Saturday morning, and Friday the voice logs went quiet. Do not brief this as a zero-call week, and do not brief a connect rate.</p>
+        <div class="idrow">
+          <span class="idchip">tenant ee122920-8af6-4c0d-af1a-3bf4d93c1414</span>
+          <span class="idchip">Meesho BOT 5b2b6fdb</span>
+          <span class="idchip">IVR b10da93c</span>
+          <span class="idchip">123 days on platform</span>
+          <span class="idchip">created 2026-06-16</span>
+        </div>
+        <p class="meta mono">window 2026-10-10 04:32 UTC &#8594; 2026-10-17 04:38 UTC &#183; PostHog + Loki (same 7 days) &#183; eleventh weekly run</p>
+      </div>
+      <div class="tools">
+        <button class="theme" type="button" id="themeBtn" aria-label="Toggle color theme">Theme</button>
+      </div>
+    </header>
+
+    <div class="rail" aria-label="Component verdicts">
+      <div class="vcell">
+        <div class="vtop"><span class="dot" style="background:var(--warning)"></span><span class="vstate" style="color:var(--warning-text)">Unscored</span></div>
+        <div class="vlabel">Voice</div>
+        <p class="vnote">Meesho VoiceLink logs ran every day through 15 Oct, then collapsed on 16 Oct. The only graded slice is 2,953 analyses on 10 Oct, 04:35-10:32. No connect rate this week.</p>
+      </div>
+      <div class="vcell">
+        <div class="vtop"><span class="dot" style="background:var(--serious)"></span><span class="vstate" style="color:var(--serious-text)">Degraded</span></div>
+        <div class="vlabel">Platform</div>
+        <p class="vnote">The edge is up: 61,647 of 61,871 HTTP lines are 2xx. p95 288 ms, mean 79 ms. Call, credit, pageview, and api_error events are zero for every tenant, not just this one.</p>
+      </div>
+      <div class="vcell">
+        <div class="vtop"><span class="dot" style="background:var(--accent)"></span><span class="vstate" style="color:var(--accent)">Split</span></div>
+        <div class="vlabel">Automations &amp; integrations</div>
+        <p class="vnote">/webhooks returned 200 50,439 times. /automations returned 200 163 times. Execution and messaging events are dark for every tenant, so those hits are not a delivery rate.</p>
+      </div>
+      <div class="vcell">
+        <div class="vtop"><span class="dot" style="background:var(--warning)"></span><span class="vstate" style="color:var(--warning-text)">Friction</span></div>
+        <div class="vlabel">Console</div>
+        <p class="vnote">Pageviews are dark platform-wide, so seats are unscored. Loki still shows the console: 161 thread 404s, prompts used, 26 lists created, and 8 recording 500s on 16 Oct.</p>
+      </div>
+    </div>
+
+    <section id="s01">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">01 &#183; Where they stand</p>
+          <h2>Servers busy, scoreboard blank, Friday quiet.</h2>
+        </div>
+      </div>
+      <p class="prose">123 days on the platform. The last week the scoreboard and the calls agreed was 3-9 Oct: 64,348 completed, 23,396 connected (36.4%), 210 hours of talk, almost all Meesho BOT on VoiceLink. That number is last week&#8217;s report, not a re-query. This week the product tape for this tenant is one Saturday morning. From 10 Oct 04:35 through 10:32, gpt-4o graded 2,953 Meesho calls and Gemini took the turns, with zero model errors. At 10:32 those rows stop. Dedicated orchestrator logs do not. Gemini Live, the call session, and the settlement dispatcher keep writing through 15 Oct. On 16 Oct they drop together. That Friday quiet is real server silence, not another missing event.</p>
+      <div class="kpis">
+        <div class="kpi"><div class="val">2,953</div><div class="cap">Graded calls, 10 Oct morning only</div><div class="delta flat">not the week&#8217;s volume</div></div>
+        <div class="kpi"><div class="val">Unscored</div><div class="cap">Connect rate this week</div><div class="delta flat">last scored 36.4% on 3-9 Oct</div></div>
+        <div class="kpi"><div class="val">0</div><div class="cap">Model errors, n=11,653</div><div class="delta up">$ai_is_error 0</div></div>
+        <div class="kpi"><div class="val">$37.29</div><div class="cap">gpt-4o cost, Saturday slice</div><div class="delta flat">Gemini Live unpriced</div></div>
+        <div class="kpi"><div class="val">99.6%</div><div class="cap">HTTP 2xx, 61,647 / 61,871</div><div class="delta up">p95 288 ms &#183; mean 79 ms</div></div>
+        <div class="kpi"><div class="val">Fri 16</div><div class="cap">Voice logs collapse</div><div class="delta down">616 lines vs 50,098 Thu</div></div>
+      </div>
+    </section>
+
+    <section id="s02">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">02 &#183; Voice reliability</p>
+          <h2>One scored morning, then log lines, then a quiet Friday.</h2>
+        </div>
+      </div>
+      <p class="prose">All 2,953 graded calls are Meesho BOT, outbound, VoiceLink, pipeline gemini_live. Two live models share that morning: gemini-live-2.5-flash-native-audio on 2,552 call ids (6,804 turns, 1.73 s average) and gemini-3.8-live on 649 call ids (1,896 turns, 5.97 s). Those id sets may overlap, so they are not a sum. The analysis row is the one-per-call count. There is no call_completed row beside them, so connected, failed, voicemail, and talk time are blank. Do not carry 36.4% forward as this week.</p>
+      <div class="panel">
+        <h3>Graded calls by hour, Saturday 10 Oct only</h3>
+        <p class="sub">These are gpt-4o post_call_analysis generations, one per graded call. The other six days have no product rows. A zero is not drawn, because a missing row is not a measured zero.</p>
+        <div class="chartbox">
+          <svg class="chart" id="chartHours" viewBox="0 0 1040 260" role="img" aria-label="Graded calls by hour on 10 October"></svg>
+          <div class="tip" id="tipHours"></div>
+        </div>
+        <div class="legend"><span><i style="background:var(--cat-blue)"></i>Graded calls</span></div>
+      </div>
+      <div class="panel">
+        <h3>Gemini Live log lines by calendar day</h3>
+        <p class="sub">Separate chart. These are orchestrator log lines, not calls. They answer &#8220;did the voice process keep running?&#8221; The 10 Oct bar includes midnight to 04:30, before this window. Saturday 17 Oct 00:00-04:38 is in the week totals and is not a bar.</p>
+        <div class="chartbox">
+          <svg class="chart" id="chartGemini" viewBox="0 0 1040 260" role="img" aria-label="Daily Gemini Live log lines"></svg>
+          <div class="tip" id="tipGemini"></div>
+        </div>
+        <div class="legend"><span><i style="background:var(--cat-blue)"></i>gemini-live info lines</span></div>
+      </div>
+      <div class="panel">
+        <h3>Platform HTTP 200s, same days</h3>
+        <p class="sub">Separate chart again. A call and an HTTP 200 are different sizes, so they do not share an axis. Most 200s are /webhooks (50,439 of 61,647), which is the edge accepting callbacks, not a console session.</p>
+        <div class="chartbox">
+          <svg class="chart" id="chartHttp" viewBox="0 0 1040 240" role="img" aria-label="Daily platform HTTP 200s"></svg>
+          <div class="tip" id="tipHttp"></div>
+        </div>
+        <div class="legend"><span><i style="background:var(--cat-orange)"></i>HTTP 200</span></div>
+      </div>
+      <p class="prose">39 Gemini Live sessions closed with an error across the whole week. 21 of them failed while processing audio, 9 hit an AI Studio monthly spend cap, 4 hit the depleted-prepayment close, 3 found the service unavailable, and 2 were internal. Against a week of factory logs that is noise, not the August outage. IDFC BOT wrote 4 Gemini lines. IVR is the static program: 60,023 static-call lines on account b10da93c, present 10-14 Oct and absent 15-16 Oct. Static lines are not voice calls, and they are not a credit total. The settlement dispatcher wrote 110,125 info lines and the message label is empty. That is not proof of a credit leak, and it is not a call count.</p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Account</th><th class="n">HTTP with status</th><th>What the logs show</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Meesho BOT</td><td class="n">26,825</td><td>Voice factory. Gemini Live 515,251 lines. VoiceLink adapter 21,772. Analysis dispatcher 17,987.</td></tr>
+            <tr><td>IVR</td><td class="n">33,891</td><td>Static program. static-call-service 60,023 lines, through 14 Oct. VoiceLink adapter 5,984 on this account too.</td></tr>
+            <tr><td>IDFC BOT</td><td class="n">178</td><td>4 Gemini Live lines. Not a factory day. n=4.</td></tr>
+            <tr><td>MoneyView BOT</td><td class="n">78</td><td>No voice-component lines.</td></tr>
+            <tr><td>Meesho IVR</td><td class="n">63</td><td>HTTP only.</td></tr>
+            <tr><td>Hero BOT</td><td class="n">52</td><td>HTTP only.</td></tr>
+            <tr><td>Dailer</td><td class="n">30</td><td>HTTP only. The deleted Dailer id is still absent.</td></tr>
+            <tr><td>No account id</td><td class="n">737</td><td>Status lines with a blank accountId.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <details class="appendix">
+        <summary>Daily server table (the chart&#8217;s numbers)</summary>
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th class="n">Gemini lines</th>
+                <th class="n">Call session</th>
+                <th class="n">VoiceLink</th>
+                <th class="n">Static</th>
+                <th class="n">Settlement</th>
+                <th class="n">HTTP 200</th>
+                <th class="n">HTTP 404</th>
+              </tr>
+            </thead>
+            <tbody id="dailyBody"></tbody>
+          </table>
+        </div>
+        <p class="sub">Midnight-aligned Loki buckets. The label is the day covered, not the bucket timestamp. Line counts are not calls.</p>
+      </details>
+    </section>
+
+    <section id="s03">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">03 &#183; Conversation quality</p>
+          <h2>The grader ran for six hours. Sentiment did not.</h2>
+        </div>
+      </div>
+      <p class="prose">call_analyzed is zero, for this tenant and for every tenant, so there is no sentiment, resolution, or voicemail flag to brief. What did run is the model behind that grader. gpt-4o post_call_analysis: 2,953 generations, average latency 6.11 s, 7.3 M input tokens, 1.9 M output tokens, $37.29, 0 errors, all on Meesho BOT. Gemini Live is unpriced in PostHog. $37.29 is not a drop from last week&#8217;s $265.95. Last week was a full scored factory. This is Saturday 04:35 to 10:32. After 10:32 this tenant emits no further $ai_generation. Other tenants continue until 11 Oct 03:26, so the model pipeline itself was still on. The last scored quality fact, from the 3-9 Oct report, still stands until a new tape exists: 32.6% of connected calls hung up in under 10 seconds. It was not re-measured.</p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th><th>Span</th><th class="n">Generations</th><th class="n">Call ids</th>
+              <th class="n">Avg latency</th><th class="n">Cost</th><th class="n">Errors</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>gemini-live-2.5-flash-native-audio</td><td>conversation_turn</td><td class="n">6,804</td><td class="n">2,552</td><td class="n">1.73 s</td><td class="n">unpriced</td><td class="n">0</td></tr>
+            <tr><td>models/gemini-3.8-live</td><td>conversation_turn</td><td class="n">1,896</td><td class="n">649</td><td class="n">5.97 s</td><td class="n">unpriced</td><td class="n">0</td></tr>
+            <tr><td>gpt-4o (Azure)</td><td>post_call_analysis</td><td class="n">2,953</td><td class="n">2,953</td><td class="n">6.11 s</td><td class="n">$37.29</td><td class="n">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="s04">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">04 &#183; Findings</p>
+          <h2>The blank scoreboard is the blocking item. The pipe is not down.</h2>
+        </div>
+      </div>
+      <div class="findings">
+
+        <article class="finding critical">
+          <div class="fhead">
+            <span class="fid">F15</span>
+            <span class="chip sev-critical">Critical</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">35 days running</span>
+          </div>
+          <h3>The call and credit scoreboard is blank for every tenant, while this factory kept logging.</h3>
+          <p>call_completed, credit_reserved, credit_settled, call_analyzed, $pageview, and api_error are zero across the whole project for these seven days. $ai_generation and $exception are not, so capture itself is up. This tenant&#8217;s model rows stop at 10 Oct 10:32. Dedicated logs do not: Gemini Live, call session, bulk-call, webhooks, and the settlement dispatcher write every day through 15 Oct. A zero in the event table is an emitter stop. It is not a week with no calls, and it is not credits leaking. The 30-day baseline shows this tenant settling thousands of credit rows a day on 4-9 Oct, then the event goes dark for everyone.</p>
+          <div class="fix"><b>Fix.</b> Platform restores the product emitters and confirms one morning where the same call ids land on call_completed and on the grader. Until that morning exists, nobody briefs a volume or a connect rate from PostHog. Owner: platform engineering.</div>
+          <p class="evidence">events 7d, all tenants: call_completed 0, credit_settled 0, $pageview 0, api_error 0, $ai_generation 12,188 / 8 tenants, $exception 74. This tenant $ai_generation last_seen 2026-10-10 10:32:34. credit_settled 30d baseline: this tenant 7,911 on 4 Oct through 3,150 on 9 Oct, then 0. Loki gemini-live info 515,251 over [7d]. first_seen 2026-09-12.</p>
+        </article>
+
+        <article class="finding friction">
+          <div class="fhead">
+            <span class="fid">F4</span>
+            <span class="chip sev-friction">Friction</span>
+            <span class="chip live">Not re-scored</span>
+            <span class="chip">32.6% last scored &#183; 9 Oct</span>
+          </div>
+          <h3>The opener problem is still the last measured quality fact. This week cannot see it.</h3>
+          <p>On the last scored tape, 7,635 of 23,396 connected calls lasted under 10 seconds, and the median connected call was 20 seconds. That is the callee hanging up on the opener. call_completed did not return this week, so the share was not recomputed and it is not closed. The Saturday grader still ran, which means those six hours of recordings exist to listen to.</p>
+          <div class="fix"><b>Fix.</b> Solutions pulls the 10 Oct 09:00 hour (815 graded calls, the peak) once the recording URLs resolve, and checks whether the opener moved. Owner: solutions. Do not quote 32.6% as this week.</div>
+          <p class="evidence">Prior report, call_completed connected AND talk &lt; 10s: 7635/23396. This window call_completed: 0 for every tenant. Hourly post_call_analysis 10 Oct 09:00: 815.</p>
+        </article>
+
+        <article class="finding friction">
+          <div class="fhead">
+            <span class="fid">F23</span>
+            <span class="chip sev-friction">Friction</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">8 failures &#183; 16 Oct</span>
+          </div>
+          <h3>Eight recording requests on Friday returned HTTP 500 because the call id was cut off.</h3>
+          <p>All eight are GET /proxy/calls/ with a broken id: two real call ids, each requested as a truncated head and a truncated tail. The same ids also 404 when requested whole, and one of them was asked for as a file named with &#8220;mp3 (2)&#8221;, which is what a browser does to a duplicate download. A bad id should be a 400, not a 500. n=8 on a week of 61,871 status lines. It is small, and it is the only 500 cluster.</p>
+          <div class="fix"><b>Fix.</b> Console opens call 87f619a2 and call 75ff874f and confirms the player requests the full id. Platform should answer a short id with 400. Owner: console engineering, then platform.</div>
+          <p class="evidence">Loki Platform-Dedicated [7d] statusCode=500 n=8, all on bucket ending 2026-10-17 00:00 (calendar 16 Oct). URLs truncate 87f619a2-dd04-41e5-b1f3-63a0b2bacd14 and 75ff874f-fb42-44d0-9a1e-2f85e27d242e. Sibling 400: /proxy/calls/87f619a2-....mp3%20(2).mpeg n=1.</p>
+        </article>
+
+        <article class="finding friction">
+          <div class="fhead">
+            <span class="fid">F3</span>
+            <span class="chip sev-friction">Friction</span>
+            <span class="chip live">Not measurable</span>
+            <span class="chip">last seen 10 Oct 02:04</span>
+          </div>
+          <h3>The fought pages cannot be re-counted. The click events are dark for everyone.</h3>
+          <p>Last week /app/broadcasts/new took 140 dead clicks from 3 people on 2 pageviews, and contact lists took a rage cluster. $dead_click, $rageclick, and $pageview are zero for every tenant this week, so a clean console is not what the zero means. The routes themselves were used: prompts returned 200 825 times, contact lists returned 201 26 times and 400 4 times.</p>
+          <div class="fix"><b>Fix.</b> Product keeps broadcasts/new and the contact-list control on the list until pageviews return and the dead-click count can be taken again. Owner: product. Do not close on a dark event.</div>
+          <p class="evidence">events 7d all tenants: $pageview 0, $dead_click 0, $rageclick not in the inventory. Loki contact-lists 201 n=26, 200 n=350, 400 n=4. prompts 200 n=825. Ledger last_seen 2026-10-10 02:04, before this window.</p>
+        </article>
+
+        <article class="finding noise">
+          <div class="fhead">
+            <span class="fid">F9</span>
+            <span class="chip sev-noise">Noise</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">161 of 199 HTTP 404s</span>
+          </div>
+          <h3>Opening a call with no thread is still most of the error list.</h3>
+          <p>GET /threads/by-call/:id is 161 of 199 HTTP 404s. That is an empty thread reported as a failure. It showed up every in-window day and peaked at 83 on 13 Oct and 56 on 16 Oct. api_error recorded none of them, because that event is dark for every tenant. While this stays in the 404 pile, the eight real 500s are easy to miss. Bulk-job 404s are 4, the same empty-result class, not a new finding.</p>
+          <div class="fix"><b>Fix.</b> Console renders a missing thread as an empty state and stops shipping it as an error. Owner: console engineering.</div>
+          <p class="evidence">Loki Platform-Dedicated [7d] status 404 by path: /threads/by-call 161, /proxy/calls 28, /proxy/prompts 4, /bulk-dispatch-jobs 4, /proxy/browser-call 2. Sum 199.</p>
+        </article>
+
+        <article class="finding noise">
+          <div class="fhead">
+            <span class="fid">F22</span>
+            <span class="chip sev-noise">Noise</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">9 closes</span>
+          </div>
+          <h3>Gemini Live is also closing because the AI Studio project hit its monthly spend cap.</h3>
+          <p>Nine sessions closed with code 1011 and the spend-cap sentence. That is a different switch from the depleted-prepayment close in F18, which is still 4 this week. Neither is a MagickVoice credit balance. The factory did not stop on these 9. They will recur if the cap stays where it is.</p>
+          <div class="fix"><b>Fix.</b> Platform checks the AI Studio spend cap before month end, alongside the prepayment balance in F18. Owner: platform.</div>
+          <p class="evidence">Loki Orchestrator-Dedicated [7d] component=gemini-live detected_level=error: code 1011 reason &#8220;exceeded its monthly spending cap&#8221; n=9. Sibling prepayment n=4. Total gemini-live errors 39.</p>
+        </article>
+
+        <article class="finding noise">
+          <div class="fhead">
+            <span class="fid">F18</span>
+            <span class="chip sev-noise">Noise</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">4 closes</span>
+          </div>
+          <h3>The depleted AI Studio prepayment close is still in the log, smaller than last week.</h3>
+          <p>Four Gemini sessions closed with the prepayment sentence. Last week it was 3, and on 1 Oct it was 16. It is the same vendor account as F22. It is not the credit ledger. Voice settlements cannot be quoted this week because credit_settled is dark.</p>
+          <div class="fix"><b>Fix.</b> Same owner as F22. Check the AI Studio balance. Do not open a MagickVoice credit incident. Owner: platform.</div>
+          <p class="evidence">gemini-live error [7d]: code 1011 reason &#8220;prepayment credits are depleted&#8221; n=4. first_seen 2026-10-01.</p>
+        </article>
+
+        <article class="finding noise">
+          <div class="fhead">
+            <span class="fid">F1</span>
+            <span class="chip sev-noise">Noise</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">39 closes &#183; no connect denominator</span>
+          </div>
+          <h3>Gemini still drops a session now and then. It is not the August morning.</h3>
+          <p>39 error lines on the Gemini adapter: 21 audio-processing failures, 9 spend-cap, 4 prepayment, 3 unavailable, 2 internal. $ai_is_error is 0 on all 11,653 Saturday generations. There is no call_completed denominator, so this is not a rate. The voice logs stayed loud through Thursday, which is the check that the adapter was not switched off.</p>
+          <div class="fix"><b>Fix.</b> Platform treats the audio-processing 21 as capacity noise and the billing 13 as F22 and F18. Do not reopen the August page. Owner: platform.</div>
+          <p class="evidence">gemini-live error [7d] by reason: audio input 12, input processing 9, internal 2, unavailable 3, prepayment 4, spend cap 9. Sum 39. $ai_is_error 0/11653.</p>
+        </article>
+
+        <article class="finding verify">
+          <div class="fhead">
+            <span class="fid">F6</span>
+            <span class="chip sev-verify">Verify</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">whole week unscored</span>
+          </div>
+          <h3>Do not brief volume off the event table. This week the table is empty on purpose.</h3>
+          <p>The only product number that is safe to say out loud is 2,953 graded Meesho calls on Saturday morning, with no connect flag. Log lines are not the substitute: Gemini Live wrote 515,251 info lines, the analysis dispatcher wrote 17,987 with an empty message, and a client paged one bulk job past row 6,400 on 14 Oct. That last fact says the lists are large. It does not say Thursday had 6,400 calls.</p>
+          <div class="fix"><b>Fix.</b> Account manager briefs last week&#8217;s 64,348 and 36.4% as the last scored week, then says this week is unscored, the servers ran through Thursday, and Friday went quiet. Owner: account manager.</div>
+          <p class="evidence">$ai_generation span post_call_analysis n=2953, account 5b2b6fdb, 2026-10-10 04:35:49 to 10:32:34. Loki HTTP 429 on /proxy/calls offset=6400 limit=100, job 25ca8ca9, calendar 14 Oct, n=1.</p>
+        </article>
+
+        <article class="finding verify">
+          <div class="fhead">
+            <span class="fid">F17</span>
+            <span class="chip sev-verify">Verify</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">50,769 credit warns, no reason</span>
+          </div>
+          <h3>The big warn piles still have no sentence attached.</h3>
+          <p>credit-service warnings are 50,769 and the reason fields are empty. Call-manager is 72 errors and 42 warnings, also empty. BYOC phone-number warnings are 3,708, empty. Static-call errors are 21, empty, beside 60,023 info lines, so the static program was not switched off. Empty labels track volume. They are not a new failure, and they are not a leak.</p>
+          <div class="fix"><b>Fix.</b> Platform attaches a reason code on credit-service and call-manager before anyone pages on the count. Owner: platform.</div>
+          <p class="evidence">Loki [7d] sum by (msg, err, error, reason, code) on credit-service|byoc|error-mask warns: one unlabeled series, 54,406. call-manager error|warn: one unlabeled series, 114. static-call errors sit in an unlabeled orchestrator series of 24.</p>
+        </article>
+
+        <article class="finding verify">
+          <div class="fhead">
+            <span class="fid">F7</span>
+            <span class="chip sev-verify">Verify</span>
+            <span class="chip live">Active now</span>
+            <span class="chip">changed: the route answers</span>
+          </div>
+          <h3>Automations are not &#8220;unused&#8221; this week. Executions cannot be counted.</h3>
+          <p>Last week the execution event was live on other tenants and zero here, which meant unused. This week automation_execution_triggered and messages_dispatched are zero for every tenant, so that test is gone. What remains is HTTP: /automations returned 200 163 times, /webhooks returned 200 50,439 times, and neither path returned a 4xx. A 200 on the list is not a message delivered.</p>
+          <div class="fix"><b>Fix.</b> Account manager does not tell them automations are off. Ask whether the 163 hits are the list page or a rule they expect to fire. Owner: account manager. Engineering notes the execution event is dark platform-wide, which is F15.</div>
+          <p class="evidence">Loki url regexp bucket automations status 200 n=163. /webhooks 200 n=50,439. events 7d all tenants: automation_execution_triggered 0, messages_dispatched 0.</p>
+        </article>
+
+        <article class="finding verify">
+          <div class="fhead">
+            <span class="fid">F5</span>
+            <span class="chip sev-verify">Verify</span>
+            <span class="chip live">Not measurable</span>
+            <span class="chip">flag still untrusted</span>
+          </div>
+          <h3>The voicemail flag still cannot be briefed. The grader ran without the call_analyzed row.</h3>
+          <p>Last scored week the outcome label said voicemail on 300 calls and the is_voicemail flag said 0. call_analyzed did not return, so the flag was not re-checked. gpt-4o still graded 2,953 calls on Saturday morning, which means the analysis worker ran and the product event did not.</p>
+          <div class="fix"><b>Fix.</b> Voice keeps the outcome label as the number to quote, once call_completed returns. Do not brief a voicemail rate off the flag. Owner: voice and analysis.</div>
+          <p class="evidence">events 7d call_analyzed: 0 all tenants. $ai_generation span post_call_analysis n=2953, errors 0. Ledger: is_voicemail 0 vs outcome voicemail 300 on the 3-9 Oct tape.</p>
+        </article>
+
+        <article class="finding verify">
+          <div class="fhead">
+            <span class="fid">F14</span>
+            <span class="chip sev-verify">Verify</span>
+            <span class="chip live">Not exercised</span>
+            <span class="chip">HTTP 403 is 0</span>
+          </div>
+          <h3>The agency and browser-dialer screens were not opened. Knowledge base answered.</h3>
+          <p>No URL containing agency or webrtc was requested. Knowledge returned 200 twenty times and did not 403. The question from last week, whether they want those screens or the nav should hide them, was not asked by their traffic. Do not close it on a silent route.</p>
+          <div class="fix"><b>Fix.</b> Account manager asks once. If the answer is no, console hides the agency and browser-dialer entries. Owner: account manager, then console.</div>
+          <p class="evidence">Loki [7d] url regexp invite|retry-analysis|agency|webrtc|knowledge: knowledge 200 n=20, retry-analysis 200 n=1, agency 0, webrtc 0, invite 0. statusCode 403: 0 in the instant [7d] mix.</p>
+        </article>
+
+      </div>
+
+      <h3 style="margin-top:28px">Stood down, or not exercised</h3>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>ID</th><th>State</th><th>Why it is not an open card</th></tr></thead>
+          <tbody>
+            <tr><td>F2</td><td>Resolved 10 Oct, held</td><td>CALL_NOT_CONNECTED cannot be recounted. call_completed is absent for every tenant. Do not reopen on a missing event.</td></tr>
+            <tr><td>F8</td><td>Resolved 12 Sep, held</td><td>Contact lists: 26 created, 350 reads, 4 rejected. The upload path works. n=4 on the 400s.</td></tr>
+            <tr><td>F10</td><td>Resolved 26 Sep, held</td><td>HTTP 429 is 7, all on 14 Oct, from paging bulk jobs and the prompt list. Not the analytics status-summary storm.</td></tr>
+            <tr><td>F11</td><td>Resolved 5 Sep, held</td><td>Seats are unscored. $pageview is 0 for every tenant. Do not read that as a drop from 6 people.</td></tr>
+            <tr><td>F12</td><td>Resolved 10 Oct, held</td><td>Connect rate was 36.4% on the last scored week. It was not re-measured. Do not invent a new one.</td></tr>
+            <tr><td>F13</td><td>Not exercised</td><td>/users/invite does not appear. Last seen 22 Sep: one 201, four 500s, one 403. Do not close.</td></tr>
+            <tr><td>F16</td><td>Resolved 17 Oct</td><td>retry-analysis returned 200 once. Zero 400s. n=1, so reopen if the button 400s again.</td></tr>
+            <tr><td>F19</td><td>Resolved 10 Oct, held</td><td>Static-call errors are 21 beside 60,023 info lines. The storm did not return. Lines are present 10-14 Oct.</td></tr>
+            <tr><td>F20</td><td>Resolved 10 Oct, held</td><td>The prompt and feature-flag 500 cluster did not return. Friday&#8217;s eight 500s are F23, a different URL shape.</td></tr>
+            <tr><td>F21</td><td>Resolved 17 Oct</td><td>The recording player threw nothing. $exception is live elsewhere (74) and this tenant emitted 0. Reopen if a call page throws again.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="s05">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">05 &#183; Error surface</p>
+          <h2>Almost every error is an empty thread, a Gemini close, or a label with no text.</h2>
+        </div>
+      </div>
+      <p class="prose">Platform HTTP with a status code is 61,871 lines. 61,647 are 2xx (99.6%). p95 latency is 288 ms and the mean is 79 ms. Non-2xx is 224: 404 is 199, 400 is 7, 429 is 7, 500 is 8, 502 is 2, 409 is 1. There is no 403. Of the 2xx lines, 50,439 are /webhooks, 6,829 are /proxy, and 2,818 are /bulk-dispatch-jobs.</p>
+      <p class="prose">Orchestrator errors are 137: call-manager 72 with no reason, Gemini Live 39 with the reasons in F1, static-call 21 with no reason, error-handler 4, and 1 post-call analysis. Platform errors are 6. The warn piles are credit-service 50,769, BYOC 3,708, and caller-activity 151. The first two have empty labels. A client walking /proxy/calls with limit 100 was rate-limited at offsets 1000, 2500, 3200, 3600, and 6400, all on 14 Oct. That is a polling loop on a long list, not user rage. Two inbound-config 502s landed on 15 Oct. n=2.</p>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Source</th><th class="n">Count</th><th>Read as</th></tr></thead>
+          <tbody>
+            <tr><td>GET /threads/by-call 404</td><td class="n">161</td><td>Empty thread, counted as failure. F9.</td></tr>
+            <tr><td>credit-service warn, no reason</td><td class="n">50,769</td><td>Volume noise until it has a sentence. F17.</td></tr>
+            <tr><td>Gemini Live error</td><td class="n">39</td><td>21 audio, 13 AI Studio billing, 5 other. F1, F18, F22.</td></tr>
+            <tr><td>call-manager error, no reason</td><td class="n">72</td><td>Same empty-label class as F17.</td></tr>
+            <tr><td>GET /proxy/calls 500, truncated id</td><td class="n">8</td><td>16 Oct only. F23.</td></tr>
+            <tr><td>HTTP 429, job paging and prompts</td><td class="n">7</td><td>14 Oct only. Not F10.</td></tr>
+            <tr><td>POST /contact-lists 400</td><td class="n">4</td><td>Beside 26 successful creates. Not F8.</td></tr>
+            <tr><td>GET /phone-numbers/inbound-config 502</td><td class="n">2</td><td>15 Oct. n=2, not a new finding.</td></tr>
+            <tr><td>POST /proxy/prompts 409</td><td class="n">1</td><td>Beside 825 prompt reads and 1 create.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="s06">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">06 &#183; Timeline</p>
+          <h2>This week, in order.</h2>
+        </div>
+      </div>
+      <p class="prose">The account opened on 16 Jun 2026. The longer ledger lives with the report series. The line that matters from it: the scoreboard and the calls last agreed on 3-9 Oct.</p>
+      <ol class="tl">
+        <li>
+          <div class="tldate">Sat 10<br>04:35-10:32</div>
+          <div class="tldotwrap"><div class="tldot accent"></div></div>
+          <div>Only scored slice. 2,953 Meesho analyses, 6,804 turns on Gemini 2.5, 1,896 on Gemini 3.8, $37.29, 0 model errors. Product rows stop at 10:32. Voice logs for the calendar day stay loud.</div>
+        </li>
+        <li>
+          <div class="tldate">Sun 11</div>
+          <div class="tldotwrap"><div class="tldot good"></div></div>
+          <div>Not a day off. Gemini Live lines 30,165, the quietest full day, and HTTP 200s 9,246. Static-call lines 15,119.</div>
+        </li>
+        <li>
+          <div class="tldate">Mon 12</div>
+          <div class="tldotwrap"><div class="tldot good"></div></div>
+          <div>Gemini Live lines 98,836. One prompt 409. HTTP 200s 9,227.</div>
+        </li>
+        <li>
+          <div class="tldate">Tue 13</div>
+          <div class="tldotwrap"><div class="tldot warn"></div></div>
+          <div>Gemini Live lines 96,752. Thread 404s peak at 83. HTTP 200s 13,899.</div>
+        </li>
+        <li>
+          <div class="tldate">Wed 14</div>
+          <div class="tldotwrap"><div class="tldot good"></div></div>
+          <div>Loudest voice-log day. Gemini Live lines 153,712. HTTP 200s 19,464. Seven 429s from paging bulk jobs, one of them past row 6,400. Static-call lines 20,662, the last static day.</div>
+        </li>
+        <li>
+          <div class="tldate">Thu 15</div>
+          <div class="tldotwrap"><div class="tldot warn"></div></div>
+          <div>Voice logs still present, Gemini Live 50,098, but HTTP 200s drop to 2,660 and static lines go to zero. Two inbound-config 502s.</div>
+        </li>
+        <li>
+          <div class="tldate">Fri 16</div>
+          <div class="tldotwrap"><div class="tldot serious"></div></div>
+          <div>Voice logs collapse together: Gemini Live 616, call session 12, settlement dispatcher 12, webhooks 32. HTTP 200s remain 1,010, so the edge is up. Eight recording 500s. Thread 404s 56.</div>
+        </li>
+        <li>
+          <div class="tldate">Sat 17<br>04:38</div>
+          <div class="tldotwrap"><div class="tldot bad"></div></div>
+          <div>This report. F15 still critical, now confirmed platform-wide for the call and credit events. F16 and F21 not reproduced. F22 opened for the AI Studio spend cap.</div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="s07">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">07 &#183; Adoption and friction</p>
+          <h2>Seats cannot be counted. The routes they use still answer.</h2>
+        </div>
+      </div>
+      <p class="prose">Period comparison uses last week&#8217;s published report for the prior column. Re-querying those days would widen this run past seven days, and the events in question are dark now anyway. A zero in the this-week column is &#8220;event absent&#8221;, which is F15, not a collapse in the work.</p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Measure</th><th class="n">Prior report, 3-10 Oct</th><th class="n">This window</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>call_completed</td><td class="n">64,348</td><td class="n">event absent (0 all tenants)</td></tr>
+            <tr><td>Connected</td><td class="n">23,396 (36.4%)</td><td class="n">unscored</td></tr>
+            <tr><td>Talk time</td><td class="n">210 h</td><td class="n">unscored</td></tr>
+            <tr><td>Graded without a connect flag</td><td class="n">1,504</td><td class="n">2,953 on 10 Oct morning, then none</td></tr>
+            <tr><td>gpt-4o grading cost</td><td class="n">$265.95</td><td class="n">$37.29 (six hours, not a cheaper week)</td></tr>
+            <tr><td>Console people</td><td class="n">6 (67 sessions)</td><td class="n">unscored ($pageview absent all tenants)</td></tr>
+            <tr><td>api_error events</td><td class="n">336</td><td class="n">event absent; Loki non-2xx is 224</td></tr>
+            <tr><td>Automation executions</td><td class="n">0 here, live elsewhere</td><td class="n">event absent all tenants; route 200 x163</td></tr>
+            <tr><td>Dead clicks</td><td class="n">346</td><td class="n">event absent all tenants</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">What the HTTP log can see of the console: prompts 825 successful reads and 1 create, contact lists 26 creates, knowledge base 20 successful reads, automations 163 successful reads, credits 335, governance 357, phone numbers 230, accounts 141. Dead clicks by page are not available. The pages that failed are the thread lookup and, on Friday, two recording URLs.</p>
+    </section>
+
+    <section id="s08">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">08 &#183; Recommendation</p>
+          <h2>Restore the tape before anyone quotes a number.</h2>
+        </div>
+      </div>
+      <div class="recs">
+        <div class="rec"><div class="rn">1</div><div>Restore call_completed, credit_settled, pageview, and api_error. They are zero for every tenant, while this dedicated factory logged through Thursday. Close F15 only when one morning shows the same call ids on both the scoreboard and the grader.<div class="owner">Owner &#183; platform engineering</div></div></div>
+        <div class="rec"><div class="rn">2</div><div>Brief last week as the last scored week: 64,348 completed, 36.4% connected, 210 hours, Meesho on VoiceLink. This week, say the Saturday morning grader saw 2,953 Meesho calls with no connect flag, the servers stayed busy through Thursday, and Friday&#8217;s voice logs went quiet. Do not say they stopped calling, and do not say credits leaked.<div class="owner">Owner &#183; account manager</div></div></div>
+        <div class="rec"><div class="rn">3</div><div>Check the AI Studio monthly spend cap and the prepayment balance. Nine sessions closed on the cap and four on prepayment. The factory did not stop for them, and they are not MagickVoice credits.<div class="owner">Owner &#183; platform</div></div></div>
+        <div class="rec"><div class="rn">4</div><div>Render a missing call thread as an empty state. It is 161 of 199 HTTP 404s, and it hides the eight real 500s.<div class="owner">Owner &#183; console engineering</div></div></div>
+        <div class="rec"><div class="rn">5</div><div>Open the two Friday call pages (87f619a2 and 75ff874f) and confirm the player requests the full recording id. Those paths returned 500 when the id was cut off.<div class="owner">Owner &#183; console engineering</div></div></div>
+        <div class="rec"><div class="rn">6</div><div>When recordings resolve, listen to the 10 Oct 09:00 hour. The last measured opener problem was 32.6% of connected calls under 10 seconds, and it has not been re-scored.<div class="owner">Owner &#183; solutions</div></div></div>
+        <div class="rec"><div class="rn">7</div><div>Ask once whether they want the agency screen and the browser dialer. Neither route was opened. Knowledge base answered 200 twenty times. Do not describe automations as unused: the route returned 200 163 times, and the execution event is dark for everyone.<div class="owner">Owner &#183; account manager</div></div></div>
+      </div>
+    </section>
+
+    <section id="s09">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">09 &#183; Method</p>
+          <h2>What these numbers are, and what they are not.</h2>
+        </div>
+      </div>
+      <ul class="method prose">
+        <li>Sources: PostHog project 454290, timezone UTC, and Grafana Loki <span class="mono">grafanacloud-logs</span>. Both cover the same seven days: 2026-10-10 04:32 UTC through 2026-10-17 04:38 UTC. The instant Loki range is a trailing [7d] evaluated at 04:32-04:38 on 17 Oct.</li>
+        <li>This is the eleventh run. Identity was reused from the ledger: tenant <span class="mono">ee122920-8af6-4c0d-af1a-3bf4d93c1414</span>, created 2026-06-16, 123 days. The account set under it did not grow. Events still arrive on that tenant id, so the name was not re-resolved.</li>
+        <li>The daily bars are calendar days 10-16 Oct, from Loki [1d] buckets ending at midnight UTC. The 10 Oct bar includes 00:00-04:30, which is before the product window. Saturday 17 Oct 00:00-04:38 is inside the week totals and is not a bar.</li>
+        <li>The 30-day credit_settled query is a baseline, not this customer&#8217;s week. This tenant settled every day from 3 Oct through 9 Oct. No tenant settled from 10 Oct through 17 Oct. That is why a settlement gap is not briefed as a leak.</li>
+        <li>Prometheus <span class="mono">count by (__name__) ({tenant=~&#8221;.+&#8221;})</span> on <span class="mono">grafanacloud-prom</span> returned no series. Checked once. No metric here carries a tenant label.</li>
+        <li>No governed catalog metric matched this review. Every figure is a one-off query for this account and this week.</li>
+        <li>Log lines are not calls. Gemini Live info is 515,251. Call session is about 76,000 and its message label is empty. The analysis dispatcher is 17,987, message label empty. The settlement dispatcher is 110,125, message label empty. None of those is a volume to quote.</li>
+        <li>Model-scored sentiment was not available. Last week&#8217;s resolution rate is not repeated as this week&#8217;s result. Gemini Live cost is unpriced, not zero.</li>
+        <li>$exception is the check that browser errors would have been seen: 74 on other tenants, 0 here. A dark $pageview is a different fact, because that event is zero everywhere.</li>
+      </ul>
+    </section>
+  </div>
+  <script>
+    (function () {
+      var HOURS = [
+        { label: "04", n: 102 },
+        { label: "05", n: 316 },
+        { label: "06", n: 414 },
+        { label: "07", n: 380 },
+        { label: "08", n: 324 },
+        { label: "09", n: 815 },
+        { label: "10", n: 592 }
+      ];
+      var DAYS = [
+        { d: "2026-10-10", label: "Sat 10", gemini: 90524, session: 9088, voicelink: 1754, staticN: 6873, settle: 12474, http: 6955, f404: 1 },
+        { d: "2026-10-11", label: "Sun 11", gemini: 30165, session: 6446, voicelink: 3466, staticN: 15119, settle: 13909, http: 9246, f404: 10 },
+        { d: "2026-10-12", label: "Mon 12", gemini: 98836, session: 13779, voicelink: 4987, staticN: 6632, settle: 18158, http: 9227, f404: 11 },
+        { d: "2026-10-13", label: "Tue 13", gemini: 96752, session: 16839, voicelink: 6841, staticN: 17610, settle: 25522, http: 13899, f404: 83 },
+        { d: "2026-10-14", label: "Wed 14", gemini: 153712, session: 21059, voicelink: 8582, staticN: 20662, settle: 31291, http: 19464, f404: 33 },
+        { d: "2026-10-15", label: "Thu 15", gemini: 50098, session: 9831, voicelink: 2838, staticN: 0, settle: 9826, http: 2660, f404: 6 },
+        { d: "2026-10-16", label: "Fri 16", gemini: 616, session: 12, voicelink: 24, staticN: 0, settle: 12, http: 1010, f404: 56 }
+      ];
+
+      function css(name) {
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      }
+      function svgEl(n, a) {
+        var e = document.createElementNS("http://www.w3.org/2000/svg", n);
+        for (var k in a) e.setAttribute(k, a[k]);
+        return e;
+      }
+      function roundRect(x, y, w, h, r) {
+        var rr = Math.min(r, w / 2, h / 2);
+        if (h <= 0 || w <= 0) return "";
+        return "M" + (x + rr) + "," + y +
+          " H" + (x + w - rr) +
+          " Q" + (x + w) + "," + y + " " + (x + w) + "," + (y + rr) +
+          " V" + (y + h) +
+          " H" + x +
+          " V" + (y + rr) +
+          " Q" + x + "," + y + " " + (x + rr) + "," + y + " Z";
+      }
+      function fmt(n) {
+        if (n >= 10000) return Math.round(n / 1000) + "k";
+        return String(n);
+      }
+      function bars(svgId, tipId, rows, key, colorName, maxY, height, seriesName) {
+        var svg = document.getElementById(svgId);
+        var tip = document.getElementById(tipId);
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+        var W = 1040, H = height || 260, L = 52, R = 16, T = 22, B = 36;
+        var innerW = W - L - R, innerH = H - T - B;
+        var n = rows.length;
+        var groupW = innerW / n;
+        var barW = Math.min(groupW - 28, 72);
+        var ink3 = css("--ink-3") || "#7f8a87";
+        var ink = css("--ink") || "#0d1211";
+        var grid = css("--grid") || "#e8ebe9";
+        var fill = css(colorName) || "#2a78d6";
+        for (var g = 0; g <= 4; g++) {
+          var gy = T + innerH - (innerH * g / 4);
+          svg.appendChild(svgEl("line", { x1: L, x2: W - R, y1: gy, y2: gy, stroke: grid, "stroke-width": 1 }));
+          var tx = svgEl("text", { x: L - 8, y: gy + 4, "text-anchor": "end", fill: ink3, "font-size": 11, "font-family": "ui-monospace, SFMono-Regular, Menlo, monospace" });
+          tx.textContent = fmt(Math.round(maxY * g / 4));
+          svg.appendChild(tx);
+        }
+        rows.forEach(function (row, i) {
+          var v = row[key];
+          var bh = maxY ? (v / maxY) * innerH : 0;
+          var x = L + i * groupW + (groupW - barW) / 2;
+          var y = T + innerH - bh;
+          var p = svgEl("path", { d: roundRect(x, y, barW, Math.max(bh, 0), 4), fill: fill });
+          p.addEventListener("mousemove", function (ev) {
+            tip.style.display = "block";
+            tip.textContent = row.label + " \u00b7 " + seriesName + " " + v;
+            var rect = svg.getBoundingClientRect();
+            tip.style.left = (ev.clientX - rect.left) + "px";
+            tip.style.top = (ev.clientY - rect.top) + "px";
+          });
+          p.addEventListener("mouseleave", function () { tip.style.display = "none"; });
+          svg.appendChild(p);
+          var lab = svgEl("text", {
+            x: x + barW / 2, y: Math.max(y - 6, 12), "text-anchor": "middle", fill: ink,
+            "font-size": 11, "font-family": "ui-monospace, SFMono-Regular, Menlo, monospace"
+          });
+          lab.textContent = fmt(v);
+          svg.appendChild(lab);
+          var lx = svgEl("text", {
+            x: x + barW / 2, y: H - 12, "text-anchor": "middle", fill: ink3,
+            "font-size": 11, "font-family": "ui-monospace, SFMono-Regular, Menlo, monospace"
+          });
+          lx.textContent = row.label;
+          svg.appendChild(lx);
+        });
+      }
+      function fillTable() {
+        var body = document.getElementById("dailyBody");
+        DAYS.forEach(function (row) {
+          var tr = document.createElement("tr");
+          [row.d, row.gemini, row.session, row.voicelink, row.staticN, row.settle, row.http, row.f404].forEach(function (c, i) {
+            var td = document.createElement("td");
+            if (i) td.className = "n";
+            td.textContent = String(c);
+            tr.appendChild(td);
+          });
+          body.appendChild(tr);
+        });
+      }
+      function draw() {
+        bars("chartHours", "tipHours", HOURS, "n", "--cat-blue", 1000, 260, "graded");
+        bars("chartGemini", "tipGemini", DAYS, "gemini", "--cat-blue", 160000, 260, "gemini-live lines");
+        bars("chartHttp", "tipHttp", DAYS, "http", "--cat-orange", 20000, 240, "HTTP 200");
+      }
+      var btn = document.getElementById("themeBtn");
+      function applyTheme(t) {
+        if (t) document.documentElement.setAttribute("data-theme", t);
+        else document.documentElement.removeAttribute("data-theme");
+        requestAnimationFrame(draw);
+      }
+      btn.addEventListener("click", function () {
+        var cur = document.documentElement.getAttribute("data-theme");
+        if (cur === "dark") applyTheme("light");
+        else if (cur === "light") applyTheme(null);
+        else applyTheme(window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "dark");
+      });
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
+        if (!document.documentElement.getAttribute("data-theme")) draw();
+      });
+      fillTable();
+      draw();
+    })();
+  </script>
+</body>
+</html>
